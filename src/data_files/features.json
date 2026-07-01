@@ -1,22 +1,22 @@
 [
   {
-    "heading": "Dedicated Teams",
-    "content": "Benefit from our committed teams who ensure your success is personal. Count on expert guidance and exceptional results throughout your project journey.",
-    "svg": "groups"
-  },
-  {
-    "heading": "Simplicity and Affordability",
-    "content": "Find easy-to-use, affordable solutions with ScrewFast's line of tools and equipment. Our products make procurement simple and keep projects within budget.",
+    "heading": "Matcha Nguyên Chất",
+    "content": "Matcha được nhập khẩu và chọn lọc kỹ càng, đảm bảo vị đắng nhẹ đặc trưng và màu xanh tươi tự nhiên trong mỗi ly.",
     "svg": "verified"
   },
   {
-    "heading": "Comprehensive Documentation",
-    "content": "Integrate with ease using ScrewFast's exhaustive guides and libraries. Achieve seamless product adoption with our full suite of documentation designed for your success.",
-    "svg": "books"
+    "heading": "Pha Theo Order",
+    "content": "Mỗi ly được pha tươi theo đơn — không pha sẵn, không để lâu. Bạn luôn nhận được ly matcha ngon nhất có thể.",
+    "svg": "sparks"
   },
   {
-    "heading": "User-Centric Design",
-    "content": "Experience the difference with ScrewFast's user-focused design — where functionality meets practicality for an enhanced work experience.",
-    "svg": "frame"
+    "heading": "Giao Hàng Tận Nơi",
+    "content": "Đặt hàng dễ dàng qua GrabFood và ShopeeFood. Hiko Matcha đến tay bạn dù bạn ở đâu trong thành phố.",
+    "svg": "rocket"
+  },
+  {
+    "heading": "2 Cửa Hàng tại HCM",
+    "content": "Ghé Tân Bình hoặc Gò Vấp — hai không gian thoải mái để bạn thưởng thức matcha giữa lòng thành phố.",
+    "svg": "mapPin"
   }
 ]

@@ -2,7 +2,6 @@
 //Import relevant dependencies
 import ThemeIcon from '@components/ThemeIcon.astro';
 import NavLink from '@components/ui/links/NavLink.astro';
-import Authentication from '../misc/Authentication.astro';
 import enStrings from '@utils/navigation.ts';
 import frStrings from '@utils/fr/navigation.ts';
 import BrandLogo from '@components/BrandLogo.astro';
@@ -19,7 +18,7 @@ const homeUrl = Astro.currentLocale === 'fr' ? '/fr' : '/';
 >
   {/* Navigation container */}
   <nav
-    class="relative mx-2 w-full rounded-[36px] border border-yellow-100/40 bg-yellow-50/60 px-4 py-3 backdrop-blur-md md:flex md:items-center md:justify-between md:px-6 md:py-0 lg:px-8 xl:mx-auto dark:border-neutral-700/40 dark:bg-neutral-800/80 dark:backdrop-blur-md"
+    class="relative mx-2 w-full rounded-[36px] border border-white/15 bg-[#006D3A] px-4 py-3 shadow-sm md:flex md:items-center md:justify-between md:px-6 md:py-0 lg:px-8 xl:mx-auto"
     aria-label="Global"
   >
     <div class="flex items-center justify-between">
@@ -35,7 +34,7 @@ const homeUrl = Astro.currentLocale === 'fr' ? '/fr' : '/';
       <div class="mr-5 ml-auto md:hidden">
         <button
           type="button"
-          class="hs-collapse-toggle flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold text-neutral-600 transition duration-300 hover:bg-neutral-200 disabled:pointer-events-none disabled:opacity-50 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:focus:outline-hidden"
+          class="hs-collapse-toggle flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold text-white/90 transition duration-300 hover:bg-white/10 disabled:pointer-events-none disabled:opacity-50 focus:outline-hidden"
           data-hs-collapse="#navbar-collapse-with-animation"
           aria-controls="navbar-collapse-with-animation"
           aria-label="Toggle navigation"
@@ -85,14 +84,13 @@ const homeUrl = Astro.currentLocale === 'fr' ? '/fr' : '/';
       <div
         class="mt-5 flex flex-col gap-x-0 gap-y-4 md:mt-0 md:flex-row md:items-center md:justify-end md:gap-x-4 md:gap-y-0 md:ps-7 lg:gap-x-7"
       >
-        {/* Navigation links and Authentication component */}
+        {/* Navigation links */}
         {
           strings.navBarLinks.map(link => (
             <NavLink url={link.url} name={link.name} />
           ))
         }
 
-        <Authentication />
         <LanguagePicker />
         {/* ThemeIcon component specifically for larger screens */}
         <span class="hidden md:inline-block">

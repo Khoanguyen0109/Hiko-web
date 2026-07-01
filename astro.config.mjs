@@ -2,15 +2,24 @@ import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import sitemap from '@astrojs/sitemap';
 import starlight from '@astrojs/starlight';
+import vercel from '@astrojs/vercel';
 
 import mdx from '@astrojs/mdx';
+
+const isDev = process.argv.includes('dev');
 
 // https://astro.build/config
 export default defineConfig({
   // https://docs.astro.build/en/guides/images/#authorizing-remote-images
-  site: 'https://screwfast.uk',
+  site: 'https://hikomatcha.vn',
+  adapter: vercel(),
   image: {
     domains: ['images.unsplash.com'],
+    service: {
+      entrypoint: isDev
+        ? 'astro/assets/services/noop'
+        : 'astro/assets/services/sharp',
+    },
   },
   // i18n: {
   //   defaultLocale: "en",
@@ -123,5 +132,11 @@ export default defineConfig({
   },
   vite: {
     plugins: [tailwindcss()],
+    ssr: {
+      external: ['sharp'],
+    },
+    optimizeDeps: {
+      exclude: ['sharp'],
+    },
   },
 });

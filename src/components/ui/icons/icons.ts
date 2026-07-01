@@ -84,6 +84,58 @@ export const Icons = {
     strokeLinejoin: 'round',
     stroke: 'currentColor',
   },
+  matcha: {
+    paths: [
+      {
+        d: 'M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 017.843 4.582M12 3a8.997 8.997 00-7.843 4.582m15.686 0A11.953 11.953 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 013 12c0-1.605.42-3.113 1.157-4.418',
+      },
+    ],
+    class:
+      'mt-2 h-6 w-6 shrink-0 text-neutral-700 hs-tab-active:text-orange-400 dark:text-neutral-300 dark:hs-tab-active:text-orange-300 md:h-7 md:w-7',
+    width: 24,
+    height: 24,
+    viewBox: '0 0 24 24',
+    fill: 'none',
+    strokeWidth: '1.5',
+    strokeLinecap: 'round',
+    strokeLinejoin: 'round',
+    stroke: 'currentColor',
+  },
+  fruit: {
+    paths: [
+      { d: 'M12 4.25V3' },
+      { d: 'M9.75 3h4.5' },
+      { d: 'M12 5.25c-3.75 1.25-6 4.75-6 8.75a6 6 0 0012 0c0-4-2.25-7.5-6-8.75z' },
+      { d: 'M12 5.25c1.25 1.25 2 3 2 4.75' },
+    ],
+    class:
+      'mt-2 h-6 w-6 shrink-0 text-neutral-700 hs-tab-active:text-orange-400 dark:text-neutral-300 dark:hs-tab-active:text-orange-300 md:h-7 md:w-7',
+    width: 24,
+    height: 24,
+    viewBox: '0 0 24 24',
+    fill: 'none',
+    strokeWidth: '1.5',
+    strokeLinecap: 'round',
+    strokeLinejoin: 'round',
+    stroke: 'currentColor',
+  },
+  coffee: {
+    paths: [
+      { d: 'M17 8h1.5a3.5 3.5 0 010 7H17' },
+      { d: 'M3 8h14v8a4 4 0 01-4 4H7a4 4 0 01-4-4V8z' },
+      { d: 'M6 2v2.5M10 2v2.5M14 2v2.5' },
+    ],
+    class:
+      'mt-2 h-6 w-6 shrink-0 text-neutral-700 hs-tab-active:text-orange-400 dark:text-neutral-300 dark:hs-tab-active:text-orange-300 md:h-7 md:w-7',
+    width: 24,
+    height: 24,
+    viewBox: '0 0 24 24',
+    fill: 'none',
+    strokeWidth: '1.5',
+    strokeLinecap: 'round',
+    strokeLinejoin: 'round',
+    stroke: 'currentColor',
+  },
   arrowUp: {
     paths: [
       {

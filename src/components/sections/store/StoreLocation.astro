@@ -1,0 +1,89 @@
+---
+import { Image } from 'astro:assets';
+
+interface Props {
+  title: string;
+  description: string;
+  address: string;
+  addressNote?: string;
+  image: ImageMetadata;
+  imageAlt: string;
+  mapEmbedUrl: string;
+  mapsLink: string;
+  reversed?: boolean;
+}
+
+const {
+  title,
+  description,
+  address,
+  addressNote,
+  image,
+  imageAlt,
+  mapEmbedUrl,
+  mapsLink,
+  reversed = false,
+} = Astro.props;
+---
+
+<section
+  class="mx-auto max-w-[85rem] items-center gap-8 px-4 py-10 sm:px-6 sm:py-16 md:grid md:grid-cols-2 lg:px-8 lg:py-14 xl:gap-16 2xl:max-w-full"
+>
+  <div class:list={['mt-4 md:mt-0', reversed && 'md:order-2']}>
+    <h2
+      class="mb-4 text-3xl font-extrabold tracking-tight text-balance text-neutral-800 md:text-4xl dark:text-neutral-200"
+    >
+      {title}
+    </h2>
+    <p
+      class="mb-5 max-w-prose font-normal text-pretty text-neutral-600 sm:text-lg dark:text-neutral-400"
+    >
+      {description}
+    </p>
+    <p class="mb-2 text-base text-neutral-700 dark:text-neutral-300">
+      <span class="font-semibold text-[#006D3A] dark:text-green-400">📍 Địa chỉ:</span>
+      <strong class="ml-1 text-neutral-900 dark:text-neutral-100">{address}</strong>
+    </p>
+    {
+      addressNote && (
+        <p class="mb-6 text-sm text-neutral-500 dark:text-neutral-400">{addressNote}</p>
+      )
+    }
+    <a
+      href={mapsLink}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="inline-flex items-center gap-1.5 text-sm font-medium text-[#006D3A] underline underline-offset-2 transition hover:text-[#005a30] dark:text-green-400 dark:hover:text-green-300"
+    >
+      Mở trên Google Maps →
+    </a>
+    <div
+      class="mt-6 overflow-hidden rounded-2xl shadow-lg ring-1 ring-[#006D3A]/10 dark:ring-[#006D3A]/20"
+    >
+      <iframe
+        title={`Bản đồ ${title}`}
+        src={mapEmbedUrl}
+        width="100%"
+        height="280"
+        style="border:0;"
+        allowfullscreen=""
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        class="w-full"></iframe>
+    </div>
+  </div>
+
+  <div class:list={[reversed && 'md:order-1']}>
+    <div
+      class="overflow-hidden rounded-2xl bg-neutral-100 shadow-xl ring-1 ring-[#006D3A]/10 dark:bg-neutral-900 dark:ring-[#006D3A]/20"
+    >
+      <Image
+        src={image}
+        alt={imageAlt}
+        class="h-auto w-full object-cover"
+        draggable={false}
+        loading="lazy"
+      />
+    </div>
+  </div>
+</section>

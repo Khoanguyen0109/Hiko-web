@@ -1,38 +1,37 @@
 // An array of links for navigation bar
 const navBarLinks = [
-  { name: 'Home', url: '/' },
-  { name: 'Products', url: '/products' },
-  { name: 'Services', url: '/services' },
-  { name: 'Blog', url: '/blog' },
-  { name: 'Contact', url: '/contact' },
+  { name: 'Trang Chủ', url: '/' },
+  { name: 'Cửa hàng', url: '/store' },
+  { name: 'Câu Chuyện', url: '/story' },
+  { name: 'Liên Hệ', url: '/contact' },
 ];
 // An array of links for footer
 const footerLinks = [
   {
-    section: 'Ecosystem',
+    section: 'Khám Phá',
     links: [
-      { name: 'Documentation', url: '/welcome-to-docs/' },
-      { name: 'Tools & Equipment', url: '/products' },
-      { name: 'Construction Services', url: '/services' },
+      { name: 'Menu', url: '/products' },
+      { name: 'Cửa hàng', url: '/store' },
+      { name: 'Đặt qua GrabFood', url: 'https://food.grab.com/vn/vi/restaurant/hiko-matcha-delivery/5-C7NHN6CWJPBTAA' },
     ],
   },
   {
-    section: 'Company',
+    section: 'Hiko Matcha',
     links: [
-      { name: 'About us', url: '#' },
-      { name: 'Blog', url: '/blog' },
-      { name: 'Careers', url: '#' },
-      { name: 'Customers', url: '#' },
+      { name: 'Câu Chuyện', url: '/story' },
+      { name: 'Liên Hệ', url: '/contact' },
+      { name: 'TikTok', url: 'https://www.tiktok.com/@hikomatchacorner' },
+      { name: 'Facebook', url: 'https://www.facebook.com/profile.php?id=61575083366149' },
     ],
   },
 ];
 // An object of links for social icons
 const socialLinks = {
-  facebook: 'https://www.facebook.com/',
-  x: 'https://twitter.com/',
-  github: 'https://github.com/mearashadowfax/ScrewFast',
-  google: 'https://www.google.com/',
-  slack: 'https://slack.com/',
+  facebook: 'https://www.facebook.com/profile.php?id=61575083366149',
+  x: '#',
+  github: '#',
+  google: 'https://maps.app.goo.gl/Akt6yLFQ7qmyftWG7',
+  slack: '#',
 };
 
 export default {

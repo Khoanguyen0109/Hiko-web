@@ -10,40 +10,40 @@
 /* Dark mode colors. */
 :root {
   --border: hsla(var(--border-neutral), 0.4);
-  --backdrop-color: #272727cc;
-  --sl-color-accent: #ff801f;
-  --sl-color-accent-high: #ffa057;
-  --sl-color-accent-low: #562800;
-  --sl-color-black: #181818;
-  --sl-color-gray-1: #eee;
-  --sl-color-gray-2: #c2c2c2;
-  --sl-color-gray-3: #8b8b8b;
-  --sl-color-gray-4: #585858;
-  --sl-color-gray-5: #383838;
-  --sl-color-gray-6: #272727;
-  --sl-color-white: #fff;
-  --list-marker-color: #fb923c;
-  --border-neutral: 0, 0%, 25.1%;
+  --backdrop-color: #1F2D24cc;
+  --sl-color-accent: #4DB779;
+  --sl-color-accent-high: #82CFA1;
+  --sl-color-accent-low: #013820;
+  --sl-color-black: #1F2D24;
+  --sl-color-gray-1: #EEF4EF;
+  --sl-color-gray-2: #D8E8DA;
+  --sl-color-gray-3: #88958D;
+  --sl-color-gray-4: #5D6B63;
+  --sl-color-gray-5: #3D4F3E;
+  --sl-color-gray-6: #1F2D24;
+  --sl-color-white: #F8FBF8;
+  --list-marker-color: #B9D77A;
+  --border-neutral: 140, 25%, 25%;
 }
 
 /* Light mode colors. */
 :root[data-theme='light'] {
-  --border: hsla(var(--border-yellow), 0.4);
-  --backdrop-color: #f6f6f699;
-  --sl-color-accent: #b73d00;
-  --sl-color-accent-high: #562800;
-  --sl-color-accent-low: #ffa057;
-  --sl-color-black: #fff;
-  --sl-color-gray-1: #272727;
-  --sl-color-gray-2: #383838;
-  --sl-color-gray-3: #585858;
-  --sl-color-gray-4: #8b8b8b;
-  --sl-color-gray-5: #c2c2c2;
-  --sl-color-gray-6: #eee;
-  --sl-color-gray-7: #f6f6f6;
-  --sl-color-white: #181818;
-  --list-marker-color: #fb923c;
-  --border-yellow: 54.9, 96.7%, 88%;
+  --border: hsla(var(--border-green), 0.4);
+  --backdrop-color: #F8FBF899;
+  --sl-color-accent: #016D3B;
+  --sl-color-accent-high: #013820;
+  --sl-color-accent-low: #82CFA1;
+  --sl-color-black: #F8FBF8;
+  --sl-color-gray-1: #1F2D24;
+  --sl-color-gray-2: #2E3A31;
+  --sl-color-gray-3: #5D6B63;
+  --sl-color-gray-4: #88958D;
+  --sl-color-gray-5: #BCCEBF;
+  --sl-color-gray-6: #D8E8DA;
+  --sl-color-gray-7: #EEF4EF;
+  --sl-color-white: #1F2D24;
+  --list-marker-color: #2F8F63;
+  --border-green: 145, 45%, 77%;
 }
 
 header {

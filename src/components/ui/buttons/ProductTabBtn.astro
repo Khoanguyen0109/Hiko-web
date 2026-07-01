@@ -1,34 +1,72 @@
 ---
-// Destructure the properties from Astro.props
 const { id, dataTab, title, first } = Astro.props;
 
-// Define TypeScript interface for the properties
 interface Props {
   id: string;
   dataTab: string;
   title: string;
   first?: boolean;
 }
-// Define constants for styling classes
-const BUTTON_CLASS =
-  'flex w-full justify-center rounded-xl border border-transparent p-3 outline-hidden ring-zinc-500 transition duration-300 hover:bg-neutral-100 focus-visible:ring-3 dark:ring-zinc-200 dark:hover:bg-neutral-700 dark:focus:outline-hidden md:p-5';
 
-const HEADING_CLASS = 'block text-center font-bold';
-const INACTIVE_HEADING_CLASS = 'text-neutral-800 dark:text-neutral-200';
+interface TabContent {
+  label: string;
+  subtitle: string;
+}
+
+const TAB_CONTENT: Record<string, TabContent> = {
+  Description: {
+    label: 'Giới thiệu',
+    subtitle: 'Về món này',
+  },
+  Specifications: {
+    label: 'Thông tin',
+    subtitle: 'Size & thành phần',
+  },
+  Blueprints: {
+    label: 'Hình ảnh',
+    subtitle: 'Gallery món',
+  },
+  Spécifications: {
+    label: 'Thông tin',
+    subtitle: 'Size & thành phần',
+  },
+  Plans: {
+    label: 'Hình ảnh',
+    subtitle: 'Gallery món',
+  },
+};
+
+const tab = TAB_CONTENT[title] ?? { label: title, subtitle: '' };
+
+const BUTTON_CLASS =
+  'product-tab-btn flex w-full flex-col items-center justify-center gap-0.5 rounded-xl border border-transparent p-3 text-center outline-hidden ring-[#006D3A]/30 transition duration-300 hover:bg-[#006D3A]/5 focus-visible:ring-3 md:p-5';
+
+const isActive = first;
 ---
 
-{/* Tab button element */}
 <button
   type="button"
-  class={`${BUTTON_CLASS} ${first ? 'active bg-neutral-100 hover:border-transparent dark:bg-white/[.05]' : ''}`}
+  class:list={[BUTTON_CLASS, { active: isActive, 'bg-[#006D3A]/10': isActive }]}
   id={id}
   data-target={dataTab}
   role="tab"
+  aria-selected={isActive ? 'true' : 'false'}
 >
-  {/* Tab text */}
   <span
-    class={`${HEADING_CLASS} ${first ? 'text-orange-400 dark:text-orange-300' : INACTIVE_HEADING_CLASS}`}
+    class:list={[
+      'tab-title block text-sm font-bold md:text-base',
+      isActive
+        ? 'text-[#006D3A] dark:text-green-400'
+        : 'text-neutral-800 dark:text-neutral-200',
+    ]}
   >
-    {title}
+    {tab.label}
   </span>
+  {
+    tab.subtitle && (
+      <span class="tab-subtitle block text-xs font-medium text-neutral-500 opacity-80 dark:text-neutral-400">
+        {tab.subtitle}
+      </span>
+    )
+  }
 </button>

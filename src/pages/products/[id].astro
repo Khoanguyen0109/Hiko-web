@@ -333,9 +333,8 @@ const ogTitle = `${product.data.title} | Hardware Tools | ScrewFast`;
       if (btn !== activeButton) {
         btn.classList.remove(
           'active',
-          'bg-neutral-100',
-          'hover:border-transparent',
-          'dark:bg-white/[.05]'
+          'bg-[#006D3A]/10',
+          'hover:border-transparent'
         );
 
         const tabId = btn.getAttribute('data-target');
@@ -349,7 +348,7 @@ const ogTitle = `${product.data.title} | Hardware Tools | ScrewFast`;
         changeHeadingStyle(
           btn,
           ['text-neutral-800', 'dark:text-neutral-200'],
-          ['text-orange-400', 'dark:text-orange-300']
+          ['text-[#006D3A]', 'dark:text-green-400']
         );
       }
     }
@@ -357,9 +356,8 @@ const ogTitle = `${product.data.title} | Hardware Tools | ScrewFast`;
     function activateButton(button: any) {
       button.classList.add(
         'active',
-        'bg-neutral-100',
-        ',hover:border-transparent',
-        'dark:bg-white/[.05]'
+        'bg-[#006D3A]/10',
+        'hover:border-transparent'
       );
 
       const tabId = button.getAttribute('data-target');
@@ -372,7 +370,7 @@ const ogTitle = `${product.data.title} | Hardware Tools | ScrewFast`;
 
       changeHeadingStyle(
         button,
-        ['text-orange-400', 'dark:text-orange-300'],
+        ['text-[#006D3A]', 'dark:text-green-400'],
         ['text-neutral-800', 'dark:text-neutral-200']
       );
     }
@@ -382,7 +380,7 @@ const ogTitle = `${product.data.title} | Hardware Tools | ScrewFast`;
       addClasses: any,
       removeClasses: any
     ) {
-      let heading = button.querySelector('span');
+      let heading = button.querySelector('.tab-title');
       if (heading) {
         heading.classList.remove(...removeClasses);
         heading.classList.add(...addClasses);
@@ -394,7 +392,7 @@ const ogTitle = `${product.data.title} | Hardware Tools | ScrewFast`;
     if (tabButtons.length > 0) {
       changeHeadingStyle(
         tabButtons[0],
-        ['text-orange-400', 'dark:text-orange-300'],
+        ['text-[#006D3A]', 'dark:text-green-400'],
         []
       );
     }

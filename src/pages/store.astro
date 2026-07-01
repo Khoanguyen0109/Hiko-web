@@ -1,0 +1,63 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import MainSection from '@components/ui/blocks/MainSection.astro';
+import StoreLocation from '@components/sections/store/StoreLocation.astro';
+import { SITE } from '@data/constants';
+
+import leLoiStorefront from '@images/store/le-loi-storefront.png';
+import leVanSyStall from '@images/store/le-van-sy-stall.png';
+
+const pageTitle = `Cửa hàng | ${SITE.title}`;
+const metaDescription =
+  'Ghé Hiko Matcha tại 2 cửa hàng ở Tân Bình & Gò Vấp — không gian chill, matcha tươi pha theo order. Xem địa chỉ và bản đồ tại đây.';
+const ogTitle = 'Cửa hàng Hiko Matcha | Tân Bình & Gò Vấp';
+
+const intro = `Ghé Hiko Matcha nha! 🍵 Tụi mình có hai mái nhà ở Sài Gòn — một nơi nằm gọn trong hẻm xinh, một nơi ngay mặt tiền đường Lê Lợi rộn ràng. Dù bạn muốn tìm góc học bài yên tĩnh hay ngồi ngoài trời chill cùng ly matcha, đều có chỗ cho bạn đấy. Đời khó có matcha — ghé tụi mình nhé!`;
+---
+
+<MainLayout
+  title={pageTitle}
+  lang="vi"
+  customDescription={metaDescription}
+  customOgTitle={ogTitle}
+  structuredData={{
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': `${SITE.url}/store`,
+    url: `${SITE.url}/store`,
+    name: ogTitle,
+    description: metaDescription,
+    isPartOf: {
+      '@type': 'WebSite',
+      url: SITE.url,
+      name: SITE.title,
+      description: SITE.description,
+    },
+    inLanguage: 'vi-VN',
+  }}
+>
+  <MainSection title="Cửa hàng" subTitle={intro} />
+
+  <StoreLocation
+    title="Hiko Matcha — Lê Lợi"
+    description="Mái nhà mới của tụi mình — mặt tiền xinh xắn với cây xanh, ghế ngồi ngoài trời và slogan Chill · Sip · Vibe đúng nghĩa luôn. Ghé uống matcha, chụp ảnh, tag tụi mình nhen! 💚"
+    address="101 Lê Lợi, P. Hạnh Thông, Gò Vấp"
+    addressNote="Mặt tiền đường — dễ tìm, khu đồ uống sầm uất."
+    image={leLoiStorefront}
+    imageAlt="Mặt tiền Hiko Matcha tại 101 Lê Lợi — Chill, Sip, Vibe"
+    mapEmbedUrl="https://maps.google.com/maps?q=10.8192724,106.6857471&hl=vi&z=17&output=embed"
+    mapsLink="https://maps.app.goo.gl/Akt6yLFQ7qmyftWG7"
+  />
+
+  <StoreLocation
+    title="Hiko Matcha — Lê Văn Sỹ"
+    description="Ngôi nhà đầu tiên của Hiko — quầy gỗ ấm cúng phong cách Nhật, mèo thần tài dễ thương, matcha thơm lan khắp hẻm. Hơi khó tìm một chút nhưng đáng đi lắm nha, kiểu hidden gem ấy~ ✨"
+    address="281/25/1 Lê Văn Sỹ, P.1, Quận Tân Bình"
+    addressNote="Nằm trong hẻm — bám theo Google Maps là tới nha!"
+    image={leVanSyStall}
+    imageAlt="Quầy matcha gỗ Hiko Matcha tại 281/25/1 Lê Văn Sỹ"
+    mapEmbedUrl="https://maps.google.com/maps?q=281%2F25%2F1+L%C3%AA+V%C4%83n+S%E1%BB%B9,+Ph%C6%B0%E1%BB%9Dng+1,+Qu%E1%BA%ADn+T%C3%A2n+B%C3%ACnh,+TP.+H%E1%BB%93+Ch%C3%AD+Minh&hl=vi&z=17&output=embed"
+    mapsLink="https://www.google.com/maps/search/?api=1&query=281%2F25%2F1+L%C3%AA+V%C4%83n+S%E1%BB%B9,+Ph%C6%B0%E1%BB%9Dng+1,+Qu%E1%BA%ADn+T%C3%A2n+B%C3%ACnh"
+    reversed={true}
+  />
+</MainLayout>

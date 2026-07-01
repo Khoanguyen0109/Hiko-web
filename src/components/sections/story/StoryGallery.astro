@@ -1,0 +1,118 @@
+---
+import { Image } from 'astro:assets';
+
+interface LayerImage {
+  src: ImageMetadata;
+  alt: string;
+  class: string;
+}
+
+interface StoryChapter {
+  step: string;
+  title: string;
+  caption: string;
+  layers: LayerImage[];
+  reverse?: boolean;
+}
+
+interface Props {
+  chapters: StoryChapter[];
+}
+
+const { chapters } = Astro.props;
+---
+
+<section
+  class="mx-auto max-w-[85rem] px-4 pb-20 sm:px-6 lg:px-8 lg:pb-28 2xl:max-w-full"
+  aria-label="Hành trình Hiko Matcha"
+>
+  <div class="relative mx-auto max-w-5xl">
+    {/* Timeline spine */}
+    <div
+      class="absolute top-0 bottom-0 left-4 hidden w-px bg-linear-to-b from-[#006D3A]/5 via-[#006D3A]/30 to-[#006D3A]/5 md:left-1/2 md:block md:-translate-x-px"
+      aria-hidden="true"
+    />
+
+    <ol class="space-y-20 md:space-y-28">
+      {
+        chapters.map((chapter, chapterIndex) => (
+          <li class="relative">
+            {/* Timeline node */}
+            <div
+              class="absolute top-8 left-4 z-10 hidden md:left-1/2 md:block md:-translate-x-1/2"
+              aria-hidden="true"
+            >
+              <span class="flex h-10 w-10 items-center justify-center rounded-full border-2 border-[#006D3A]/30 bg-white text-sm font-bold text-[#006D3A] shadow-sm dark:border-[#006D3A]/50 dark:bg-neutral-900 dark:text-green-400">
+                {chapter.step}
+              </span>
+            </div>
+
+            <article
+              class:list={[
+                'grid items-center gap-8 md:grid-cols-2 md:gap-12 lg:gap-16',
+                chapter.reverse && 'md:[direction:rtl]',
+              ]}
+            >
+              {/* Text */}
+              <div
+                class:list={[
+                  'relative pl-12 md:pl-0',
+                  chapter.reverse ? 'md:[direction:ltr]' : '',
+                ]}
+              >
+                <span class="mb-3 inline-flex items-center gap-2 rounded-full bg-[#006D3A]/10 px-3 py-1 text-xs font-semibold tracking-wide text-[#006D3A] uppercase md:hidden dark:bg-[#006D3A]/20 dark:text-green-400">
+                  Bước {chapter.step}
+                </span>
+                <h2 class="text-2xl font-bold text-balance text-neutral-800 md:text-3xl dark:text-neutral-100">
+                  {chapter.title}
+                </h2>
+                <p class="mt-3 max-w-md text-pretty leading-relaxed text-neutral-600 dark:text-neutral-400">
+                  {chapter.caption}
+                </p>
+              </div>
+
+              {/* Layered images */}
+              <div
+                class:list={[
+                  'relative pl-12 md:pl-0',
+                  chapter.reverse ? 'md:[direction:ltr]' : '',
+                ]}
+              >
+                <div class="relative mx-auto aspect-[4/5] w-full max-w-md sm:aspect-[3/4] md:max-w-none md:aspect-[4/5] lg:aspect-[5/6]">
+                  {chapter.layers.map((layer, layerIndex) => (
+                    <div
+                      class={`absolute transition duration-500 hover:z-50 ${layer.class}`}
+                      style={`z-index: ${layerIndex + 1}`}
+                    >
+                      <div class="group h-full w-full overflow-hidden rounded-2xl bg-neutral-100 shadow-2xl ring-1 ring-[#006D3A]/10 transition duration-300 hover:-translate-y-1 hover:shadow-[0_25px_50px_-12px_rgba(0,109,58,0.25)] dark:bg-neutral-900 dark:ring-[#006D3A]/20">
+                        <Image
+                          src={layer.src}
+                          alt={layer.alt}
+                          class="h-full w-full object-cover"
+                          draggable={false}
+                          loading={
+                            chapterIndex === 0 && layerIndex === 0
+                              ? 'eager'
+                              : 'lazy'
+                          }
+                        />
+                      </div>
+                    </div>
+                  ))}
+
+                  {/* Decorative layer count badge */}
+                  <span
+                    class="absolute -bottom-3 -right-2 z-50 rounded-full bg-[#006D3A] px-3 py-1 text-xs font-semibold text-white shadow-lg md:-bottom-4 md:-right-4"
+                    aria-hidden="true"
+                  >
+                    {chapter.layers.length} ảnh
+                  </span>
+                </div>
+              </div>
+            </article>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>

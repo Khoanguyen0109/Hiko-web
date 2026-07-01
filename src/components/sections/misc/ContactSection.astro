@@ -1,5 +1,4 @@
 ---
-// Import the necessary dependencies.
 import AuthBtn from '@components/ui/buttons/AuthBtn.astro';
 import ContactIconBlock from '@components/ui/blocks/ContactIconBlock.astro';
 import TextInput from '@components/ui/forms/input/TextInput.astro';
@@ -8,15 +7,29 @@ import PhoneInput from '@components/ui/forms/input/PhoneInput.astro';
 import TextAreaInput from '@components/ui/forms/input/TextAreaInput.astro';
 import Icon from '@components/ui/icons/Icon.astro';
 
-// Define the variables that will be used in this component
-const title: string = 'Contact us';
-const subTitle: string =
-  "Have questions or want to discuss a project? Reach out, and let's craft the perfect solution with our tools and services.";
-const formTitle: string = 'Fill in the form below';
-const formSubTitle: string = "We'll get back to you in 1-2 business days.";
+const title = 'Liên hệ Hiko Matcha';
+const subTitle =
+  'Có câu hỏi, muốn hợp tác, đặt tiệc nhóm hay chỉ muốn nói lời chào? Gửi tin nhắn cho tụi mình — sẽ phản hồi sớm nhất có thể.';
+const formTitle = 'Gửi tin nhắn';
+const formSubTitle = 'Thường phản hồi trong 1–2 ngày làm việc.';
+
+const status = Astro.url.searchParams.get('sent')
+  ? 'success'
+  : Astro.url.searchParams.get('error')
+    ? 'error'
+    : null;
+
+const errorMessages: Record<string, string> = {
+  missing: 'Vui lòng điền họ tên, email và nội dung tin nhắn.',
+  email: 'Email không hợp lệ. Vui lòng kiểm tra lại.',
+  send: 'Không gửi được tin nhắn. Thử lại sau hoặc nhắn qua Facebook.',
+  config: 'Form chưa được cấu hình. Vui lòng liên hệ qua Facebook hoặc GrabFood.',
+};
+
+const errorCode = Astro.url.searchParams.get('error') ?? '';
+const errorMessage = errorMessages[errorCode] ?? 'Đã xảy ra lỗi. Vui lòng thử lại.';
 ---
 
-{/* Contact Us */}
 <section class="mx-auto max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
   <div class="mx-auto max-w-2xl lg:max-w-5xl">
     <div class="text-center">
@@ -32,40 +45,53 @@ const formSubTitle: string = "We'll get back to you in 1-2 business days.";
 
     <div class="mt-12 grid items-center gap-6 lg:grid-cols-2 lg:gap-16">
       <div class="flex flex-col rounded-xl p-4 sm:p-6 lg:p-8">
+        {
+          status === 'success' && (
+            <div
+              class="mb-6 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-800 dark:border-green-800 dark:bg-green-900/20 dark:text-green-200"
+              role="status"
+            >
+              Cảm ơn bạn! Tin nhắn đã được gửi — tụi mình sẽ phản hồi sớm nhé. 🍵
+            </div>
+          )
+        }
+        {
+          status === 'error' && (
+            <div
+              class="mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 dark:border-red-800 dark:bg-red-900/20 dark:text-red-200"
+              role="alert"
+            >
+              {errorMessage}
+            </div>
+          )
+        }
+
         <h2
           class="mb-8 text-xl font-bold text-neutral-700 dark:text-neutral-300"
         >
           {formTitle}
         </h2>
-        {
-          /* Form for user input with various input fields.-->
-        {/* Each field utilizes a different input component for the specific type of input (text, email, phone, and textarea)*/
-        }
-        <form>
+
+        <form method="POST" action="/api/contact">
+          <div class="hidden" aria-hidden="true">
+            <label for="website">Website</label>
+            <input type="text" id="website" name="website" tabindex="-1" autocomplete="off" />
+          </div>
+
           <div class="grid gap-4">
-            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <TextInput
-                id="hs-firstname-contacts"
-                label="First Name"
-                name="hs-firstname-contacts"
-              />
-              <TextInput
-                id="hs-lastname-contacts"
-                label="Last Name"
-                name="hs-lastname-contacts"
-              />
-            </div>
-            <EmailContactInput id="hs-email-contacts" />
-            <PhoneInput id="hs-phone-number" />
+            <TextInput id="contact-name" label="Họ và tên" name="name" required />
+            <EmailContactInput id="contact-email" label="Email" />
+            <PhoneInput id="contact-phone" label="Số điện thoại" />
             <TextAreaInput
-              id="hs-about-contacts"
-              label="Details"
-              name="hs-about-contacts"
+              id="contact-message"
+              label="Tin nhắn của bạn"
+              name="message"
+              required
             />
           </div>
 
           <div class="mt-4 grid">
-            <AuthBtn title="Send Message" />
+            <AuthBtn title="Gửi tin nhắn" />
           </div>
 
           <div class="mt-3 text-center">
@@ -76,45 +102,60 @@ const formSubTitle: string = "We'll get back to you in 1-2 business days.";
         </form>
       </div>
 
-      {
-        /*ContactIconBlocks are used to display different methods of contacting, including visiting office, email, browsing knowledgebase, and FAQ.*/
-      }
       <div class="divide-y divide-neutral-300 dark:divide-neutral-700">
         <ContactIconBlock
-          heading="Knowledgebase"
-          content="Browse through all of our knowledgebase articles."
-          isLinkVisible={true}
-          linkTitle="Visit guides & tutorials"
-          linkURL="#"
-          isArrowVisible={true}
-          ><Icon name="question" />
-        </ContactIconBlock>
-
-        <ContactIconBlock
-          heading="FAQ"
-          content="Explore our FAQ for quick, clear answers to common queries."
-          isLinkVisible={true}
-          linkTitle="Visit FAQ"
-          linkURL="#"
-          isArrowVisible={true}
-          ><Icon name="chatBubble" />
-        </ContactIconBlock>
-
-        <ContactIconBlock
-          heading="Visit our office"
-          content="UK ScrewFast"
+          heading="Chi nhánh Lê Văn Sỹ"
+          content="Ngôi nhà đầu tiên của Hiko — quầy gỗ ấm cúng trong hẻm Lê Văn Sỹ, Tân Bình."
           isAddressVisible={true}
-          addressContent="72 Union Terrace, E10 4PE London"
-          ><Icon name="mapPin" />
+          addressContent="281/25/1 Lê Văn Sỹ, P.1, Quận Tân Bình, TP.HCM"
+          isLinkVisible={true}
+          linkTitle="Xem trên Google Maps"
+          linkURL="https://www.google.com/maps/search/?api=1&query=281%2F25%2F1+L%C3%AA+V%C4%83n+S%E1%BB%B9,+Ph%C6%B0%E1%BB%9Dng+1,+Qu%E1%BA%ADn+T%C3%A2n+B%C3%ACnh"
+          isArrowVisible={true}
+        >
+          <Icon name="mapPin" />
         </ContactIconBlock>
 
         <ContactIconBlock
-          heading="Contact us by email"
-          content="Prefer the written word? Drop us an email at"
+          heading="Chi nhánh Lê Lợi"
+          content="Mặt tiền xinh xắn tại Gò Vấp — ghế ngoài trời, không gian Chill · Sip · Vibe."
+          isAddressVisible={true}
+          addressContent="101 Lê Lợi, P. Hạnh Thông, Quận Gò Vấp, TP.HCM"
           isLinkVisible={true}
-          linkTitle="support@screwfast.uk"
-          linkURL="#"
-          ><Icon name="envelopeOpen" />
+          linkTitle="Xem trên Google Maps"
+          linkURL="https://maps.app.goo.gl/Akt6yLFQ7qmyftWG7"
+          isArrowVisible={true}
+        >
+          <Icon name="mapPin" />
+        </ContactIconBlock>
+
+        <ContactIconBlock
+          heading="Đặt hàng online"
+          content="Không kịp ghé quán? Đặt Matcha Coco, Cold Whisk và fruit lattes qua GrabFood."
+          isLinkVisible={true}
+          linkTitle="Đặt trên GrabFood"
+          linkURL="https://food.grab.com/vn/vi/restaurant/hiko-matcha-delivery/5-C7NHN6CWJPBTAA"
+          isArrowVisible={true}
+        >
+          <Icon name="rocket" />
+        </ContactIconBlock>
+
+        <ContactIconBlock
+          heading="Theo dõi Hiko"
+          content="Cập nhật menu mới, ưu đãi và khoảnh khắc chill tại quán."
+          isLinkVisible={true}
+          linkTitle="Facebook Hiko Matcha"
+          linkURL="https://www.facebook.com/profile.php?id=61575083366149"
+          isArrowVisible={true}
+        >
+          <Icon name="facebook" />
+        </ContactIconBlock>
+
+        <ContactIconBlock
+          heading="Giờ mở cửa"
+          content="Mở cửa mỗi ngày từ 06:30 đến 22:15 — sáng sớm ly matcha, tối muộn vẫn có chỗ chill."
+        >
+          <Icon name="house" />
         </ContactIconBlock>
       </div>
     </div>

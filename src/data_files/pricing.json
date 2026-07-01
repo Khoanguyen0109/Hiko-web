@@ -1,38 +1,37 @@
 {
-  "title": "Simple, Transparent Pricing",
-  "subTitle": "Boost efficiency with ScrewFast's clear, value-driven plans.",
-  "badge": "Best value",
-  "thirdOption": "Enterprise Solutions?",
-  "btnText": "Get a Custom Quote",
+  "title": "Signature Drinks",
+  "subTitle": "Những ly matcha được yêu thích nhất tại Hiko Matcha.",
+  "badge": "Bán chạy nhất",
+  "thirdOption": "Muốn xem toàn bộ menu?",
+  "btnText": "Xem Menu Đầy Đủ",
 
   "starterKit": {
-    "name": "Starter Kit",
-    "description": "Best option for DIY projects",
-    "price": "49",
-    "cents": ".00",
-    "billingFrequency": "USD / monthly",
+    "name": "Matcha Coco",
+    "description": "Matcha nguyên chất kết hợp dừa tươi xay mịn",
+    "price": "53",
+    "cents": "k",
+    "billingFrequency": "VND / ly",
     "features": [
-      "Key hardware tools",
-      "Access to guides & tutorials",
-      "Standard support"
+      "Matcha đậm vị nguyên chất",
+      "Dừa tươi không quá ngọt",
+      "Điều chỉnh đường theo yêu cầu"
     ],
-    "purchaseBtnTitle": "Get the Starter Kit",
-    "purchaseLink": "#"
+    "purchaseBtnTitle": "Đặt qua GrabFood",
+    "purchaseLink": "https://food.grab.com/vn/vi/restaurant/hiko-matcha-delivery/5-C7NHN6CWJPBTAA"
   },
 
   "professionalToolbox": {
-    "name": "Professional Toolbox",
-    "description": "Best for large scale uses",
-    "price": "89",
-    "cents": ".00",
-    "billingFrequency": "USD / monthly",
+    "name": "Matcha Cold Whisk",
+    "description": "Matcha pha lạnh theo phong cách truyền thống Nhật Bản",
+    "price": "53",
+    "cents": "k",
+    "billingFrequency": "VND / ly",
     "features": [
-      "Premium tool selection",
-      "Priority support",
-      "Exclusive content & deals",
-      "Bulk order discounts"
+      "Bột matcha đánh thủ công",
+      "Vị matcha thuần, không pha trộn",
+      "Phục vụ đá viên tươi"
     ],
-    "purchaseBtnTitle": "Get the Professional Toolbox",
-    "purchaseLink": "#"
+    "purchaseBtnTitle": "Đặt qua GrabFood",
+    "purchaseLink": "https://food.grab.com/vn/vi/restaurant/hiko-matcha-delivery/5-C7NHN6CWJPBTAA"
   }
 }

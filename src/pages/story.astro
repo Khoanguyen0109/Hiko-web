@@ -1,0 +1,229 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import StoryGallery from '@components/sections/story/StoryGallery.astro';
+import { Image } from 'astro:assets';
+import { SITE } from '@data/constants';
+
+import story01 from '@images/story/01-motorbike-stall.png';
+import story02 from '@images/story/02-founders.png';
+import story03 from '@images/story/03-wooden-stall.png';
+import story04 from '@images/story/04-matcha-cup.png';
+import story05 from '@images/story/05-le-van-sy.png';
+import story06 from '@images/story/06-cafe-collage.png';
+import story07 from '@images/story/07-storefront.png';
+import story08 from '@images/story/08-storefront-stools.png';
+import story09 from '@images/story/09-poster-wall.png';
+import story10 from '@images/story/10-interior.png';
+
+const storyChapters = [
+  {
+    step: '01',
+    title: 'Khởi đầu bên vỉa hè',
+    caption:
+      'Từ một chiếc thùng matcha nhỏ trên xe máy — chỉ có hai đứa cùng đứng bán, ngày này qua ngày khác.',
+    layers: [
+      {
+        src: story01,
+        alt: 'Hiko Matcha — thùng matcha nhỏ trên xe máy bên vỉa hè',
+        class:
+          'inset-0 z-0 h-[78%] w-[88%] left-[6%] top-[4%]',
+      },
+      {
+        src: story02,
+        alt: 'Hai người sáng lập Hiko Matcha cùng nhau bán matcha',
+        class:
+          'bottom-0 right-0 z-20 h-[52%] w-[58%] rotate-2 md:h-[48%] md:w-[52%]',
+      },
+    ],
+  },
+  {
+    step: '02',
+    title: 'Tiệm gỗ đầu tiên',
+    caption:
+      'Quầy matcha phong cách Nhật — góc nhỏ ấm áp, nơi tụi mình học cách pha từng ly matcha thật chất.',
+    reverse: true,
+    layers: [
+      {
+        src: story03,
+        alt: 'Quầy matcha gỗ phong cách Nhật — tiệm nhỏ đầu tiên',
+        class:
+          'inset-0 z-0 h-[80%] w-[90%] left-[5%] top-[2%]',
+      },
+      {
+        src: story04,
+        alt: 'Ly matcha Hiko — matcha đậm vị cho ngày mới đậm chất riêng',
+        class:
+          'bottom-2 left-0 z-20 h-[55%] w-[48%] -rotate-3 md:bottom-4 md:h-[50%] md:w-[44%]',
+      },
+    ],
+  },
+  {
+    step: '03',
+    title: 'Hẻm Lê Văn Sỹ',
+    caption:
+      'Tiệm nhỏ đầu tiên ở 281/25/1 Lê Văn Sỹ — không gian chill, đèn lồng xinh và khách quen ngày càng đông.',
+    layers: [
+      {
+        src: story05,
+        alt: 'Hiko Matcha tại 281/25/1 Lê Văn Sỹ, Phường 1, Tân Bình',
+        class:
+          'inset-0 z-0 h-[72%] w-[62%] left-[4%] top-[6%]',
+      },
+      {
+        src: story06,
+        alt: 'Không gian quán Hiko Matcha — ấm cúng, chill và thân thiện',
+        class:
+          'bottom-0 right-0 z-20 h-[58%] w-[72%] rotate-1 md:h-[54%] md:w-[68%]',
+      },
+    ],
+  },
+  {
+    step: '04',
+    title: 'Chill — Sip — Vibe',
+    caption:
+      'Mặt tiền mới với cây xanh, ghế ngồi ngoài trời — nơi bạn ghé qua, ngồi chill và nhâm nhi matcha cùng tụi mình.',
+    reverse: true,
+    layers: [
+      {
+        src: story07,
+        alt: 'Mặt tiền Hiko Matcha — Chill, Sip, Vibe',
+        class:
+          'inset-0 z-0 h-[76%] w-[92%] left-[4%] top-[8%]',
+      },
+      {
+        src: story08,
+        alt: 'Khu vực ngồi ngoài trời trước cửa hàng Hiko Matcha',
+        class:
+          'bottom-0 left-[8%] z-20 h-[46%] w-[78%] -rotate-1 md:bottom-2 md:h-[42%] md:w-[74%]',
+      },
+    ],
+  },
+  {
+    step: '05',
+    title: 'Mái nhà mới tại Lê Lợi',
+    caption:
+      'Tường poster đầy cá tính, không gian trong ấm áp — thêm một mái nhà mới, nhưng vẫn là Hiko mà tụi mình yêu thương.',
+    layers: [
+      {
+        src: story09,
+        alt: 'Tường poster matcha đầy cá tính bên trong quán',
+        class:
+          'inset-0 z-0 h-[74%] w-[94%] left-[3%] top-[4%]',
+      },
+      {
+        src: story10,
+        alt: 'Không gian trong quán Hiko Matcha — bàn gỗ, ghế da và cây xanh',
+        class:
+          'bottom-0 right-0 z-20 h-[50%] w-[62%] rotate-2 md:h-[46%] md:w-[58%]',
+      },
+    ],
+  },
+];
+
+const description = `Từ một chiếc thùng matcha nhỏ bên vỉa hè, chỉ có hai đứa cùng đứng bán, tụi mình đã đi qua rất nhiều ngày tháng bằng sự kiên trì và ước mơ cháy bỏng.
+
+Từng bước một, Hiko có tiệm nhỏ đầu tiên ở hẻm Lê Văn Sỹ. Rồi tụi mình có thêm những người đồng đội tuyệt vời, nhiều vị khách yêu thương và hôm nay là thêm một mái nhà mới tại Lê Lợi.
+
+Mỗi cột mốc đều có dấu chân của các bạn. Cảm ơn bạn vì đã luôn dõi theo, đồng hành và ủng hộ Hiko từ những ngày đầu tiên. Và hãy cùng tụi mình viết thật nhiều câu chuyện tuyệt vời nữa nhé!
+
+Yêu các bạn nhiều lắm. 🍵`;
+
+const pageTitle = `Câu Chuyện | ${SITE.title}`;
+const metaDescription =
+  'Hành trình Hiko Matcha — từ thùng matcha bên vỉa hè đến hai cửa hàng tại Tân Bình và Gò Vấp.';
+const ogTitle = 'Câu chuyện của Hiko | Hiko Matcha';
+---
+
+<MainLayout
+  title={pageTitle}
+  lang="vi"
+  customDescription={metaDescription}
+  customOgTitle={ogTitle}
+  structuredData={{
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': `${SITE.url}/story`,
+    url: `${SITE.url}/story`,
+    name: ogTitle,
+    description: metaDescription,
+    isPartOf: {
+      '@type': 'WebSite',
+      url: SITE.url,
+      name: SITE.title,
+      description: SITE.description,
+    },
+    inLanguage: 'vi-VN',
+  }}
+>
+  {/* Hero with intro + opening layered stack */}
+  <section
+    class="mx-auto max-w-[85rem] px-4 pt-10 pb-6 sm:px-6 sm:pt-14 lg:px-8 lg:pb-10 2xl:max-w-full"
+  >
+    <div class="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+      <div class="max-w-xl">
+        <p
+          class="mb-3 text-sm font-semibold tracking-wide text-[#006D3A] uppercase dark:text-green-400"
+        >
+          Câu Chuyện
+        </p>
+        <h1
+          class="text-4xl font-extrabold tracking-tight text-balance text-neutral-800 md:text-5xl dark:text-neutral-100"
+        >
+          Câu chuyện của Hiko
+        </h1>
+        <div
+          class="mt-6 space-y-4 text-pretty leading-relaxed text-neutral-600 sm:text-lg dark:text-neutral-400"
+        >
+          {
+            description.split('\n\n').map(paragraph => (
+              <p>{paragraph}</p>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Hero layered preview — images 1 & 2 */}
+      <div
+        class="relative mx-auto aspect-[4/5] w-full max-w-lg lg:max-w-none lg:aspect-[5/6]"
+      >
+        <div
+          class="absolute inset-0 z-0 h-[78%] w-[88%] left-[6%] top-[4%]"
+        >
+          <div
+            class="h-full w-full overflow-hidden rounded-2xl shadow-2xl ring-1 ring-[#006D3A]/10"
+          >
+            <Image
+              src={story01}
+              alt="Hiko Matcha — thùng matcha nhỏ trên xe máy bên vỉa hè"
+              class="h-full w-full object-cover"
+              loading="eager"
+              draggable={false}
+            />
+          </div>
+        </div>
+        <div
+          class="absolute bottom-0 right-0 z-20 h-[52%] w-[58%] rotate-2 md:h-[48%] md:w-[52%]"
+        >
+          <div
+            class="h-full w-full overflow-hidden rounded-2xl shadow-2xl ring-2 ring-white dark:ring-neutral-900"
+          >
+            <Image
+              src={story02}
+              alt="Hai người sáng lập Hiko Matcha"
+              class="h-full w-full object-cover"
+              loading="eager"
+              draggable={false}
+            />
+          </div>
+        </div>
+        <span
+          class="absolute -bottom-3 left-1/2 z-30 -translate-x-1/2 rounded-full bg-[#006D3A] px-4 py-1.5 text-xs font-semibold text-white shadow-lg"
+        >
+          Bắt đầu từ đây 🍵
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <StoryGallery chapters={storyChapters} />
+</MainLayout>
