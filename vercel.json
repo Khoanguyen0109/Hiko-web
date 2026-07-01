@@ -1,6 +1,6 @@
 {
   "framework": "astro",
-  "installCommand": "npm install --include=optional",
+  "installCommand": "rm -rf node_modules && npm install --include=optional",
   "buildCommand": "npm run build",
   "headers": [
     {
