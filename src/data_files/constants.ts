@@ -2,7 +2,7 @@ import ogImageSrc from '@images/social.png';
 
 export const SITE = {
   title: 'Hiko Matcha',
-  tagline: 'Matcha Tươi, Pha Theo Cách Của Bạn',
+  tagline: '100% Matcha Nhật — Đậm vị nguyên bản',
   description:
     'Hiko Matcha – thưởng thức matcha tươi pha theo order tại 2 cửa hàng ở Tân Bình & Gò Vấp, TP.HCM. Đặt hàng qua GrabFood hoặc ghé trực tiếp.',
   description_short:
