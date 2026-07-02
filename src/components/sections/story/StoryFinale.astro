@@ -1,0 +1,67 @@
+---
+import { Image } from 'astro:assets';
+
+import communityCollage from '@images/story/community-collage.png';
+
+interface Props {
+  paragraphs: string[];
+}
+
+const { paragraphs } = Astro.props;
+---
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,500;0,700;1,500&display=swap"
+  rel="stylesheet"
+/>
+
+<section
+  class="story-finale relative left-1/2 w-screen -translate-x-1/2 overflow-hidden"
+  aria-label="Câu chuyện của chúng mình"
+>
+  {/* Community collage banner */}
+  <div class="bg-[#1B3B2B]">
+    <Image
+      src={communityCollage}
+      alt="Hiko Matcha — khoảnh khắc cùng team và khách yêu thương"
+      class="block h-auto w-full"
+      loading="lazy"
+      draggable={false}
+    />
+  </div>
+
+  {/* Story text on green */}
+  <div class="bg-[#1B3B2B] px-4 pb-20 pt-8 sm:px-6 sm:pb-24 lg:px-8 lg:pb-28">
+    <div
+      class="mx-auto grid max-w-6xl items-start gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-16"
+    >
+      <div class="lg:pt-4">
+        <h2 class="story-finale-title text-white">
+          <span class="block font-['Great_Vibes'] text-5xl leading-none sm:text-6xl lg:text-7xl">
+            Câu chuyện
+          </span>
+          <span
+            class="mt-2 block font-['Playfair_Display'] text-3xl font-medium italic sm:text-4xl lg:text-[2.75rem]"
+          >
+            Của chúng mình
+          </span>
+        </h2>
+      </div>
+
+      <div
+        class="space-y-4 text-pretty text-base leading-relaxed text-white/90 sm:text-lg"
+      >
+        {
+          paragraphs.map(paragraph => (
+            <p>{paragraph}</p>
+          ))
+        }
+        <p class="pt-2 font-medium text-white">
+          From Hiko Matcha <span aria-hidden="true">💚🍵</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

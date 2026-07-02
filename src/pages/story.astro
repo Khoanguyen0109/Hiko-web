@@ -1,6 +1,7 @@
 ---
 import MainLayout from '@/layouts/MainLayout.astro';
 import StoryGallery from '@components/sections/story/StoryGallery.astro';
+import StoryFinale from '@components/sections/story/StoryFinale.astro';
 import { Image } from 'astro:assets';
 import { SITE } from '@data/constants';
 
@@ -226,4 +227,6 @@ const ogTitle = 'Câu chuyện của Hiko | Hiko Matcha';
   </section>
 
   <StoryGallery chapters={storyChapters} />
+
+  <StoryFinale paragraphs={description.split('\n\n')} />
 </MainLayout>
