@@ -1,7 +1,17 @@
 const DEFAULT_POS_API_URL = 'http://localhost:3000/api';
+const PRODUCTION_POS_API_URL =
+  'https://divine-nature-production-1489.up.railway.app/api';
 
 export function getPosApiUrl(): string {
-  return import.meta.env.HIKO_POS_API_URL ?? DEFAULT_POS_API_URL;
+  if (import.meta.env.HIKO_POS_API_URL) {
+    return import.meta.env.HIKO_POS_API_URL;
+  }
+
+  if (import.meta.env.PROD) {
+    return PRODUCTION_POS_API_URL;
+  }
+
+  return DEFAULT_POS_API_URL;
 }
 
 export async function proxyPosCampaign(
