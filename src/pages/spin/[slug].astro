@@ -1,0 +1,77 @@
+---
+import SpinApp from '@/components/spin/SpinApp';
+import '@/assets/styles/spin.css';
+import { getPosApiUrl } from '@/lib/posCampaignProxy';
+import type { PublicCampaign } from '@/types/campaign';
+
+export const prerender = false;
+
+const { slug } = Astro.params;
+
+if (!slug) {
+  return Astro.redirect('/404');
+}
+
+const apiUrl = getPosApiUrl().replace(/\/$/, '');
+let campaign: PublicCampaign | null = null;
+let fetchError = '';
+
+try {
+  const response = await fetch(`${apiUrl}/campaign/${encodeURIComponent(slug)}/public`, {
+    headers: { Accept: 'application/json' },
+  });
+
+  if (response.ok) {
+    const payload = (await response.json()) as {
+      success?: boolean;
+      data?: PublicCampaign;
+    };
+    campaign = payload.data ?? null;
+  } else {
+    const payload = (await response.json().catch(() => ({}))) as { message?: string };
+    fetchError = payload.message ?? 'Không tìm thấy chiến dịch.';
+  }
+} catch {
+  fetchError = 'Không thể kết nối máy chủ. Vui lòng thử lại sau.';
+}
+
+const pageTitle = campaign?.name ?? 'Vòng Quay May Mắn';
+const pageDescription =
+  campaign?.description ?? 'Nhập số điện thoại để quay và nhận ưu đãi Hiko Matcha';
+---
+
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="description" content={pageDescription} />
+    <title>{pageTitle} | Hiko Matcha</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="spin-page">
+    <div class="page">
+      <header class="header">
+        <div class="logo">HK</div>
+        <h1>{campaign?.name ?? 'Vòng Quay May Mắn'}</h1>
+        <p class="subtitle">{pageDescription}</p>
+      </header>
+
+      {
+        campaign ? (
+          <SpinApp client:load slug={slug} campaign={campaign} />
+        ) : (
+          <section class="card error-card">
+            <h2>Không thể mở trang quay</h2>
+            <p>{fetchError || 'Chiến dịch không tồn tại hoặc đã kết thúc.'}</p>
+          </section>
+        )
+      }
+    </div>
+  </body>
+</html>
