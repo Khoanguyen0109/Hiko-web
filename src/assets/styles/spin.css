@@ -163,6 +163,10 @@
 }
 
 .spin-page .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
   width: 100%;
   border: none;
   border-radius: 999px;
@@ -170,6 +174,7 @@
   font-family: inherit;
   font-size: 1rem;
   font-weight: 700;
+  text-decoration: none;
   cursor: pointer;
   transition:
     transform 0.15s,

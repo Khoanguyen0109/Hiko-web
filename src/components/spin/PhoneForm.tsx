@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { normalizePhone } from '@/lib/spinUtils';
+import GoHomeButton from '@/components/spin/GoHomeButton';
 
 interface PhoneFormProps {
   loading: boolean;
@@ -80,6 +81,7 @@ export default function PhoneForm({ loading, onSpin, onLookup }: PhoneFormProps)
         >
           Xem Voucher Của Tôi
         </button>
+        <GoHomeButton />
       </div>
     </section>
   );

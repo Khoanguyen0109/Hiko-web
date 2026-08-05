@@ -2,6 +2,7 @@ import { useCallback, useMemo, useState } from 'react';
 import PhoneForm from '@/components/spin/PhoneForm';
 import SpinWheel from '@/components/spin/SpinWheel';
 import VoucherDisplay from '@/components/spin/VoucherDisplay';
+import GoHomeButton from '@/components/spin/GoHomeButton';
 import {
   findLoseSlotIndex,
   findSlotIndexByLabel,
@@ -215,9 +216,12 @@ export default function SpinApp({ slug, campaign }: SpinAppProps) {
             qrToken={winState.qrToken}
             expiresAt={winState.expiresAt}
           />
-          <button type="button" className="btn btn-secondary" onClick={resetToPhone}>
-            Quay lại
-          </button>
+          <div className="btn-row">
+            <button type="button" className="btn btn-secondary" onClick={resetToPhone}>
+              Quay lại
+            </button>
+            <GoHomeButton />
+          </div>
         </section>
       ) : null}
 

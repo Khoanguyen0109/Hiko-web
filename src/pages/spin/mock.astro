@@ -180,6 +180,10 @@
       }
 
       .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
         width: 100%;
         border: none;
         border-radius: 999px;
@@ -187,6 +191,7 @@
         font-family: inherit;
         font-size: 1rem;
         font-weight: 700;
+        text-decoration: none;
         cursor: pointer;
         transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
       }
@@ -494,6 +499,7 @@
         <div class="btn-row">
           <button id="btn-spin" class="btn btn-primary">Quay Ngay</button>
           <button id="btn-lookup" class="btn btn-secondary">Xem Voucher Của Tôi</button>
+          <a href="/" class="btn btn-secondary">Vô Hiko nè!</a>
         </div>
       </section>
 
@@ -524,7 +530,10 @@
           </div>
         </div>
         <p class="staff-note">Đưa màn hình này cho nhân viên quét QR tại quầy. Mỗi mã chỉ dùng 1 lần.</p>
-        <button class="btn btn-secondary" data-goto="phone">Quay lại</button>
+        <div class="btn-row">
+          <button class="btn btn-secondary" data-goto="phone">Quay lại</button>
+          <a href="/" class="btn btn-secondary">Vô Hiko nè!</a>
+        </div>
       </section>
 
       <!-- Screen 4: Lose -->
