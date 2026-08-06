@@ -60,7 +60,8 @@ export default function PhoneForm({ loading, onSpin, onLookup }: PhoneFormProps)
           </p>
         ) : (
           <p className="hint" style={{ marginTop: '0.5rem' }}>
-            Mỗi số chỉ được quay 1 lần trong chiến dịch này.
+            Lần đầu quay sẽ nhận mã xác thực qua Zalo. Mỗi số có giới hạn lượt theo chiến
+            dịch.
           </p>
         )}
       </div>
