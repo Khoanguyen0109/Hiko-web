@@ -58,12 +58,7 @@ export default function PhoneForm({ loading, onSpin, onLookup }: PhoneFormProps)
           <p className="hint error-hint" style={{ marginTop: '0.5rem' }}>
             {error}
           </p>
-        ) : (
-          <p className="hint" style={{ marginTop: '0.5rem' }}>
-            Lần đầu quay sẽ nhận mã xác thực qua Zalo. Mỗi số có giới hạn lượt theo chiến
-            dịch.
-          </p>
-        )}
+        ) : null}
       </div>
       <div className="btn-row">
         <button
