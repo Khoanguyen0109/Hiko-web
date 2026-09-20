@@ -4,6 +4,7 @@ import GoHomeButton from '@/components/spin/GoHomeButton';
 interface OtpFormProps {
   phone: string;
   loading: boolean;
+  channel?: 'sms' | 'zalo';
   onVerify: (otp: string) => void;
   onResend: () => void;
   onBack: () => void;
@@ -12,6 +13,7 @@ interface OtpFormProps {
 export default function OtpForm({
   phone,
   loading,
+  channel = 'sms',
   onVerify,
   onResend,
   onBack,
@@ -31,9 +33,10 @@ export default function OtpForm({
   return (
     <section className="screen active card">
       <div>
-        <label htmlFor="otp">Mã xác thực Zalo</label>
+        <label htmlFor="otp">Mã xác thực</label>
         <p className="hint" style={{ marginTop: '0.35rem', marginBottom: '0.75rem' }}>
-          Đã gửi mã đến số <strong>{phone}</strong> qua Zalo. Nhập mã 6 số để quay.
+          Đã gửi mã đến số <strong>{phone}</strong> qua{' '}
+          {channel === 'zalo' ? 'Zalo' : 'SMS'}. Nhập mã 6 số để quay.
         </p>
         <input
           id="otp"

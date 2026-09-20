@@ -41,6 +41,7 @@ interface OtpSendResult {
   success: boolean;
   alreadyVerified: boolean;
   expiresInSeconds?: number;
+  channel?: 'sms' | 'zalo';
   message?: string;
 }
 
@@ -63,6 +64,7 @@ export default function SpinApp({ slug, campaign }: SpinAppProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [pendingPhone, setPendingPhone] = useState('');
+  const [otpChannel, setOtpChannel] = useState<'sms' | 'zalo'>('sms');
   const [targetIndex, setTargetIndex] = useState(0);
   const [spinning, setSpinning] = useState(false);
   const [spinKey, setSpinKey] = useState(0);
@@ -82,6 +84,7 @@ export default function SpinApp({ slug, campaign }: SpinAppProps) {
     setWinState(null);
     setSpinning(false);
     setPendingPhone('');
+    setOtpChannel('sms');
   }, []);
 
   const handleWheelComplete = useCallback(() => {
@@ -151,6 +154,7 @@ export default function SpinApp({ slug, campaign }: SpinAppProps) {
           return;
         }
 
+        setOtpChannel(result.channel ?? 'sms');
         setScreen('otp');
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Không gửi được mã xác thực.');
@@ -208,7 +212,11 @@ export default function SpinApp({ slug, campaign }: SpinAppProps) {
         return;
       }
 
-      setStatusMessage('Đã gửi lại mã qua Zalo.');
+      const channel = result.channel ?? 'sms';
+      setOtpChannel(channel);
+      setStatusMessage(
+        channel === 'zalo' ? 'Đã gửi lại mã qua Zalo.' : 'Đã gửi lại mã qua SMS.'
+      );
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Không gửi lại được mã.');
     } finally {
@@ -296,6 +304,7 @@ export default function SpinApp({ slug, campaign }: SpinAppProps) {
           ) : null}
           <OtpForm
             phone={pendingPhone}
+            channel={otpChannel}
             loading={loading}
             onVerify={handleOtpVerify}
             onResend={handleOtpResend}
