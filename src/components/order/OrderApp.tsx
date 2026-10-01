@@ -1,12 +1,51 @@
 import { useEffect, useState } from 'react';
-import type { CartLine, MenuCategory, MenuDish, MenuTopping, PublicStore } from '@/types/publicOrder';
+import type { CartLine, CartTopping, MenuCategory, MenuDish, MenuToppingGroup, PublicStore } from '@/types/publicOrder';
 import { formatVnd } from '@/types/publicOrder';
 
 const SWATCHES = ['#B9D77A', '#D7F0E2', '#F5E7CF', '#82CFA1', '#FFF8E8', '#4DB779'];
 
-function lineKey(dishId: string, size: string, toppings: MenuTopping[]): string {
-  const toppingKey = toppings.map((topping) => topping.id).sort().join(',');
+const PUBLISHED_PLACES = [
+  {
+    match: 'lê lợi',
+    address: '101 Lê Lợi, P. Hạnh Thông, Gò Vấp',
+    mapUrl: 'https://maps.app.goo.gl/Akt6yLFQ7qmyftWG7',
+  },
+  {
+    match: 'lê văn sỹ',
+    address: '281/25/1 Lê Văn Sỹ, P.1, Quận Tân Bình',
+    mapUrl: 'https://www.google.com/maps/search/?api=1&query=281%2F25%2F1+L%C3%AA+V%C4%83n+S%E1%BB%B9,+Ph%C6%B0%E1%BB%9Dng+1,+Qu%E1%BA%ADn+T%C3%A2n+B%C3%ACnh',
+  },
+];
+
+function withPublishedPlace(store: PublicStore): PublicStore {
+  const name = store.name.toLocaleLowerCase('vi');
+  const known = PUBLISHED_PLACES.find((place) => name.includes(place.match));
+  if (!known) return store;
+  return {
+    ...store,
+    address: store.address.trim() || known.address,
+    mapUrl: store.mapUrl.trim() || known.mapUrl,
+  };
+}
+
+function lineKey(dishId: string, size: string, toppings: CartTopping[]): string {
+  const toppingKey = toppings
+    .map((topping) => `${topping.id}:${topping.quantity}`)
+    .sort()
+    .join(',');
   return `${dishId}|${size}|${toppingKey}`;
+}
+
+function toppingLabel(topping: CartTopping): string {
+  return topping.quantity > 1 ? `${topping.name} ×${topping.quantity}` : topping.name;
+}
+
+interface PickerState {
+  dish: MenuDish;
+  size: string;
+  price: number;
+  quantity: number;
+  toppingQty: Record<string, number>;
 }
 
 async function readJson<T>(request: Promise<Response>): Promise<T> {
@@ -22,9 +61,10 @@ export default function OrderApp() {
   const [stores, setStores] = useState<PublicStore[]>([]);
   const [storeId, setStoreId] = useState('');
   const [categories, setCategories] = useState<MenuCategory[]>([]);
+  const [toppingGroups, setToppingGroups] = useState<MenuToppingGroup[]>([]);
   const [categoryId, setCategoryId] = useState('');
   const [cart, setCart] = useState<CartLine[]>([]);
-  const [pickedToppings, setPickedToppings] = useState<Record<string, string[]>>({});
+  const [picker, setPicker] = useState<PickerState | null>(null);
   const [note, setNote] = useState('');
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
@@ -39,7 +79,7 @@ export default function OrderApp() {
     readJson<PublicStore[]>(fetch('/api/order/stores'))
       .then((nextStores) => {
         if (cancelled) return;
-        setStores(nextStores);
+        setStores(nextStores.map(withPublishedPlace));
         setStoreId(nextStores[0]?.id || '');
       })
       .catch((loadError: unknown) => {
@@ -57,13 +97,16 @@ export default function OrderApp() {
     if (!storeId) return;
     let cancelled = false;
     setError('');
-    readJson<{ categories: MenuCategory[] }>(fetch(`/api/order/menu?storeId=${encodeURIComponent(storeId)}`))
+    readJson<{ categories: MenuCategory[]; toppingGroups?: MenuToppingGroup[] }>(
+      fetch(`/api/order/menu?storeId=${encodeURIComponent(storeId)}`)
+    )
       .then((menu) => {
         if (cancelled) return;
         setCategories(menu.categories);
+        setToppingGroups(menu.toppingGroups || []);
         setCategoryId(menu.categories[0]?.id || '');
         setCart([]);
-        setPickedToppings({});
+        setPicker(null);
       })
       .catch((loadError: unknown) => {
         if (!cancelled) setError(loadError instanceof Error ? loadError.message : 'Không tải được menu');
@@ -73,35 +116,74 @@ export default function OrderApp() {
     };
   }, [storeId]);
 
+  const pickerToppings: CartTopping[] = picker
+    ? toppingGroups
+        .flatMap((group) => group.toppings)
+        .filter((topping) => (picker.toppingQty[topping.id] || 0) > 0)
+        .map((topping) => ({ ...topping, quantity: picker.toppingQty[topping.id] }))
+    : [];
+  const pickerTotal = picker
+    ? (picker.price + pickerToppings.reduce((sum, topping) => sum + topping.price * topping.quantity, 0)) * picker.quantity
+    : 0;
+
   const store = stores.find((entry) => entry.id === storeId);
-  const dishes = categories.find((category) => category.id === categoryId)?.dishes || [];
+  const activeCategory = categories.find((category) => category.id === categoryId);
+  const dishes = activeCategory?.dishes || [];
+  const categoryName = activeCategory?.name || '';
+  const categoryColor = activeCategory?.color || '';
   const itemCount = cart.reduce((sum, line) => sum + line.quantity, 0);
   const total = cart.reduce((sum, line) => sum + line.unitPrice * line.quantity, 0);
   const phoneValid = /^\d{10}$/.test(phone);
   const canSubmit = cart.length > 0 && name.trim().length > 0 && phoneValid && address.trim().length > 0 && !submitting;
 
-  function toggleTopping(dish: MenuDish, toppingId: string) {
-    setPickedToppings((current) => {
-      const selected = current[dish.id] || [];
-      const next = selected.includes(toppingId)
-        ? selected.filter((id) => id !== toppingId)
-        : [...selected, toppingId];
-      return { ...current, [dish.id]: next };
+  function openPicker(dish: MenuDish) {
+    const defaultSize = dish.sizes.find((size) => size.isDefault) || dish.sizes[0];
+    setPicker({
+      dish,
+      size: dish.hasSizeVariants && defaultSize ? defaultSize.size : '',
+      price: dish.hasSizeVariants && defaultSize ? defaultSize.price : dish.price,
+      quantity: 1,
+      toppingQty: {},
     });
   }
 
-  function addDish(dish: MenuDish, sizeName: string, unitPrice: number) {
-    const toppings = dish.toppings.filter((topping) => (pickedToppings[dish.id] || []).includes(topping.id));
-    const toppingTotal = toppings.reduce((sum, topping) => sum + topping.price, 0);
-    const key = lineKey(dish.id, sizeName, toppings);
-    const linePrice = unitPrice + toppingTotal;
+  function changeToppingQty(toppingId: string, delta: number) {
+    setPicker((current) => {
+      if (!current) return current;
+      const nextQty = Math.min(10, Math.max(0, (current.toppingQty[toppingId] || 0) + delta));
+      const toppingQty = { ...current.toppingQty };
+      if (nextQty === 0) delete toppingQty[toppingId];
+      else toppingQty[toppingId] = nextQty;
+      return { ...current, toppingQty };
+    });
+  }
+
+  function confirmPicker() {
+    if (!picker) return;
+    const toppings: CartTopping[] = toppingGroups
+      .flatMap((group) => group.toppings)
+      .filter((topping) => (picker.toppingQty[topping.id] || 0) > 0)
+      .map((topping) => ({ ...topping, quantity: picker.toppingQty[topping.id] }));
+    const toppingTotal = toppings.reduce((sum, topping) => sum + topping.price * topping.quantity, 0);
+    const unitPrice = picker.price + toppingTotal;
+    const key = lineKey(picker.dish.id, picker.size, toppings);
+    const quantity = picker.quantity;
     setCart((current) => {
       const existing = current.find((line) => line.key === key);
       if (existing) {
-        return current.map((line) => (line.key === key ? { ...line, quantity: line.quantity + 1 } : line));
+        return current.map((line) => (line.key === key ? { ...line, quantity: line.quantity + quantity } : line));
       }
-      return [...current, { key, dishId: dish.id, name: dish.name, size: sizeName, unitPrice: linePrice, quantity: 1, toppings }];
+      return [...current, {
+        key,
+        dishId: picker.dish.id,
+        name: picker.dish.name,
+        size: picker.size,
+        unitPrice,
+        quantity,
+        toppings,
+      }];
     });
+    setPicker(null);
   }
 
   function changeQuantity(key: string, delta: number) {
@@ -129,7 +211,10 @@ export default function OrderApp() {
               dishId: line.dishId,
               size: line.size,
               quantity: line.quantity,
-              toppingIds: line.toppings.map((topping) => topping.id),
+              toppings: line.toppings.map((topping) => ({
+                toppingId: topping.id,
+                quantity: topping.quantity,
+              })),
             })),
           }),
         })
@@ -149,7 +234,7 @@ export default function OrderApp() {
           <span>
             {line.name}
             {line.size ? ` · ${line.size}` : ''}
-            {line.toppings.length > 0 ? ` · ${line.toppings.map((topping) => topping.name).join(', ')}` : ''}
+            {line.toppings.length > 0 ? ` · ${line.toppings.map(toppingLabel).join(', ')}` : ''}
             <span className="qty">
               <button type="button" onClick={() => changeQuantity(line.key, -1)} aria-label="Bớt">−</button>
               {line.quantity}
@@ -188,22 +273,22 @@ export default function OrderApp() {
     <div className={sheetOpen ? 'order-app sheet-open' : 'order-app'}>
       <header className="order-header">
         <h1 className="logo">Đặt món</h1>
-        <nav className="stores">
+        <p className="store-label">Đặt tại</p>
+        <div className="stores">
           {stores.map((entry) => (
-            <button
-              key={entry.id}
-              type="button"
-              className={entry.id === storeId ? 'on' : undefined}
-              onClick={() => setStoreId(entry.id)}
-            >
-              {entry.name}
-              <small>{entry.address}</small>
-            </button>
+            <div key={entry.id} className={entry.id === storeId ? 'store-card on' : 'store-card'}>
+              <button type="button" onClick={() => setStoreId(entry.id)}>
+                <strong>{entry.name}</strong>
+                {entry.address ? <small>{entry.address}</small> : null}
+              </button>
+              {entry.mapUrl ? (
+                <a className="map-link" href={entry.mapUrl} target="_blank" rel="noreferrer">
+                  Mở Google Maps
+                </a>
+              ) : null}
+            </div>
           ))}
-        </nav>
-        {store?.mapUrl ? (
-          <a className="map-link" href={store.mapUrl} target="_blank" rel="noreferrer">Mở Google Maps</a>
-        ) : null}
+        </div>
       </header>
       <nav className="tabs">
         {categories.map((category) => (
@@ -221,48 +306,24 @@ export default function OrderApp() {
         <section className="grid">
           {loading ? <p className="empty">Đang tải menu.</p> : null}
           {!loading && dishes.length === 0 ? <p className="empty">Cửa hàng chưa có món.</p> : null}
-          {dishes.map((dish, index) => (
-            <article className="tile" key={dish.id}>
-              <div
-                className={dish.image ? 'swatch has-photo' : 'swatch'}
-                style={{
-                  backgroundColor: SWATCHES[index % SWATCHES.length],
-                  backgroundImage: dish.image ? `url("${dish.image}")` : undefined,
-                }}
-              >
-                {dish.image ? '' : 'Ảnh từ POS'}
-              </div>
-              <h2>{dish.name}</h2>
-              <div className="sizes">
-                {dish.hasSizeVariants ? dish.sizes.map((size) => (
-                  <button key={size.id} type="button" onClick={() => addDish(dish, size.size, size.price)}>
-                    {size.size} {formatVnd(size.price)}
-                  </button>
-                )) : (
-                  <button type="button" onClick={() => addDish(dish, '', dish.price)}>
-                    {formatVnd(dish.price)}
-                  </button>
-                )}
-              </div>
-              {dish.allowToppings ? (
-                <div className="toppings">
-                  {dish.toppings.map((topping) => {
-                    const on = (pickedToppings[dish.id] || []).includes(topping.id);
-                    return (
-                      <button
-                        key={topping.id}
-                        type="button"
-                        className={on ? 'on' : undefined}
-                        onClick={() => toggleTopping(dish, topping.id)}
-                      >
-                        {topping.name} +{formatVnd(topping.price)}
-                      </button>
-                    );
-                  })}
-                </div>
-              ) : null}
-            </article>
-          ))}
+          {dishes.map((dish, index) => {
+            const fromPrice = dish.hasSizeVariants && dish.sizes.length > 0
+              ? Math.min(...dish.sizes.map((size) => size.price))
+              : dish.price;
+            const color = categoryColor || SWATCHES[index % SWATCHES.length];
+            return (
+              <article className="tile" key={dish.id}>
+                <button type="button" className="tile-open" onClick={() => openPicker(dish)}>
+                  <div className="swatch" style={{ backgroundColor: color }}>
+                    {dish.image ? <img src={dish.image} alt="" /> : null}
+                    <span>{categoryName}</span>
+                  </div>
+                  <h2>{dish.name}</h2>
+                  <p className="from-price">{formatVnd(fromPrice)}</p>
+                </button>
+              </article>
+            );
+          })}
         </section>
         <aside className="bag">
           <button className="close-sheet" type="button" onClick={() => setSheetOpen(false)}>Đóng</button>
@@ -271,6 +332,72 @@ export default function OrderApp() {
           {fields}
         </aside>
       </div>
+      {picker ? (
+        <>
+          <button className="picker-back" type="button" aria-label="Đóng món" onClick={() => setPicker(null)} />
+          <aside className="picker">
+            <button className="close-sheet" type="button" onClick={() => setPicker(null)}>Đóng</button>
+            {picker.dish.image ? (
+              <div className="swatch picker-photo" style={{ backgroundColor: categoryColor || '#B9D77A' }}>
+                <img src={picker.dish.image} alt="" />
+                {categoryName ? <span>{categoryName}</span> : null}
+              </div>
+            ) : null}
+            <h3>{picker.dish.name}</h3>
+            {picker.dish.hasSizeVariants ? (
+              <div className="picker-block">
+                <h4>Size</h4>
+                <div className="sizes">
+                  {picker.dish.sizes.map((size) => (
+                    <button
+                      key={size.id}
+                      type="button"
+                      className={picker.size === size.size ? 'on' : undefined}
+                      onClick={() => setPicker({ ...picker, size: size.size, price: size.price })}
+                    >
+                      {size.size} {formatVnd(size.price)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <p className="from-price">{formatVnd(picker.price)}</p>
+            )}
+            {toppingGroups.map((group) => (
+              <div className="picker-block" key={group.category}>
+                <h4>{group.category}</h4>
+                {group.toppings.map((topping) => {
+                  const quantity = picker.toppingQty[topping.id] || 0;
+                  return (
+                    <div className="topping-row" key={topping.id}>
+                      <span>
+                        {topping.name}
+                        <small>+{formatVnd(topping.price)}</small>
+                      </span>
+                      <span className="qty">
+                        <button type="button" onClick={() => changeToppingQty(topping.id, -1)} disabled={quantity === 0} aria-label="Bớt topping">−</button>
+                        {quantity}
+                        <button type="button" onClick={() => changeToppingQty(topping.id, 1)} aria-label="Thêm topping">+</button>
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            ))}
+            <div className="picker-block">
+              <h4>Số lượng</h4>
+              <span className="qty">
+                <button type="button" onClick={() => setPicker({ ...picker, quantity: Math.max(1, picker.quantity - 1) })} aria-label="Bớt">−</button>
+                {picker.quantity}
+                <button type="button" onClick={() => setPicker({ ...picker, quantity: Math.min(20, picker.quantity + 1) })} aria-label="Thêm">+</button>
+              </span>
+            </div>
+            <button className="submit" type="button" onClick={confirmPicker}>
+              Thêm vào giỏ · {formatVnd(pickerTotal)}
+            </button>
+          </aside>
+        </>
+      ) : null}
       <button className="sheet-back" type="button" aria-label="Đóng phiếu" onClick={() => setSheetOpen(false)} />
       <div className="dock">
         <div>

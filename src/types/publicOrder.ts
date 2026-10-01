@@ -16,6 +16,15 @@ export interface MenuTopping {
   price: number;
 }
 
+export interface MenuToppingGroup {
+  category: string;
+  toppings: MenuTopping[];
+}
+
+export interface CartTopping extends MenuTopping {
+  quantity: number;
+}
+
 export interface MenuSize {
   id: string;
   size: string;
@@ -37,6 +46,7 @@ export interface MenuDish {
 export interface MenuCategory {
   id: string;
   name: string;
+  color: string;
   dishes: MenuDish[];
 }
 
@@ -47,7 +57,7 @@ export interface CartLine {
   size: string;
   unitPrice: number;
   quantity: number;
-  toppings: MenuTopping[];
+  toppings: CartTopping[];
 }
 
 export interface ReceiptItem {

@@ -10,11 +10,17 @@
 }
 
 .order-header {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 16px;
+  display: block;
   padding: 28px 0 8px;
+}
+
+.store-label {
+  margin: 18px 0 8px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #5d6b63;
 }
 
 .logo {
@@ -27,44 +33,62 @@
 }
 
 .stores {
-  display: flex;
-  gap: 8px;
-  overflow-x: auto;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
 }
 
-.stores button {
+.store-card {
   border: 1px solid #d8e8da;
   background: #fff;
-  color: #1f2d24;
-  text-align: left;
-  padding: 8px 12px;
-  border-radius: 12px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 700;
+  border-radius: 16px;
+  padding: 14px 16px 12px;
 }
 
-.stores button.on {
+.store-card.on {
   border-color: #006d3a;
-  background: rgb(0 109 58 / 10%);
+  background: rgb(0 109 58 / 8%);
+  box-shadow: inset 0 0 0 1px #006d3a;
+}
+
+.store-card button {
+  display: block;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  text-align: left;
+  color: inherit;
+  cursor: pointer;
+}
+
+.store-card strong {
+  display: block;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.store-card.on strong {
   color: #006d3a;
 }
 
-.stores small {
+.store-card small {
   display: block;
-  margin-top: 2px;
+  margin-top: 4px;
   color: #5d6b63;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 500;
+  line-height: 1.4;
 }
 
 .map-link {
-  font-size: 14px;
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 13px;
   color: #006d3a;
   text-decoration: underline;
   text-underline-offset: 2px;
-  font-weight: 500;
-  white-space: nowrap;
+  font-weight: 700;
 }
 
 .tabs {
@@ -122,21 +146,37 @@
 }
 
 .swatch {
-  height: 140px;
+  position: relative;
+  aspect-ratio: 4 / 3;
   border-radius: 12px;
   display: flex;
-  align-items: flex-end;
-  padding: 12px;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: #1f2d24;
-  background: #b9d77a center / cover no-repeat;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #b9d77a;
 }
 
-.swatch.has-photo {
-  color: transparent;
+.swatch img {
+  width: 80%;
+  height: 80%;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 12px rgb(0 0 0 / 25%));
+}
+
+.swatch span {
+  position: absolute;
+  left: 8px;
+  bottom: 8px;
+  max-width: calc(100% - 16px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: rgb(0 0 0 / 45%);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
 }
 
 .sizes,
@@ -145,6 +185,24 @@
   flex-wrap: wrap;
   gap: 8px;
   margin-top: 10px;
+}
+
+.tile-open {
+  display: block;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  text-align: left;
+  color: inherit;
+  cursor: pointer;
+}
+
+.from-price {
+  margin: 6px 0 0;
+  color: #006d3a;
+  font-size: 14px;
+  font-weight: 800;
 }
 
 .sizes button,
@@ -160,10 +218,83 @@
   cursor: pointer;
 }
 
+.sizes button.on,
 .toppings button.on {
   border-color: #006d3a;
   background: rgb(0 109 58 / 10%);
   color: #006d3a;
+}
+
+.picker-back {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  border: 0;
+  background: rgb(10 16 12 / 45%);
+}
+
+.picker {
+  position: fixed;
+  z-index: 80;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(440px, calc(100% - 32px));
+  max-height: 86vh;
+  overflow: auto;
+  background: #fff;
+  border: 1px solid #d8e8da;
+  border-radius: 16px;
+  padding: 18px 18px 20px;
+  box-shadow: 0 16px 40px rgb(0 31 18 / 18%);
+}
+
+.picker-photo {
+  margin-bottom: 12px;
+}
+
+.picker h3 {
+  margin: 0 0 8px;
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.picker h4 {
+  margin: 16px 0 8px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #5d6b63;
+}
+
+.picker .close-sheet {
+  display: block;
+  margin: 0 0 8px auto;
+  border: 0;
+  background: transparent;
+  color: #5d6b63;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.topping-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-top: 1px solid #d8e8da;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.topping-row small {
+  display: block;
+  margin-top: 2px;
+  color: #5d6b63;
+  font-weight: 500;
 }
 
 .bag {
@@ -393,10 +524,12 @@ html.dark .receipt h1 {
   color: #eef4ef;
 }
 
+html.dark .store-card,
 html.dark .stores button,
 html.dark .tile,
 html.dark .bag,
 html.dark .receipt,
+html.dark .picker,
 html.dark .order-app input,
 html.dark .order-app textarea,
 html.dark .sizes button,
@@ -406,6 +539,14 @@ html.dark .toppings button {
   color: #eef4ef;
 }
 
+html.dark .store-card button {
+  background: transparent;
+  border-color: transparent;
+  color: inherit;
+}
+
+html.dark .store-card.on,
+html.dark .store-card.on strong,
 html.dark .stores button.on,
 html.dark .tabs button.on,
 html.dark .toppings button.on {
@@ -424,6 +565,7 @@ html.dark .receipt dd button {
 html.dark .sub,
 html.dark .pay,
 html.dark .empty,
+html.dark .store-label,
 html.dark .stores small,
 html.dark .store-line,
 html.dark .note,
@@ -458,7 +600,7 @@ html.dark .receipt dt {
   }
 
   .stores {
-    width: 100%;
+    grid-template-columns: 1fr;
   }
 
   .order-body {
@@ -472,7 +614,7 @@ html.dark .receipt dt {
   }
 
   .swatch {
-    height: 112px;
+    aspect-ratio: 4 / 3;
   }
 
   .bag {
@@ -553,5 +695,15 @@ html.dark .receipt dt {
 
   .sheet-open .dock {
     display: none;
+  }
+
+  .picker {
+    left: 0;
+    right: 0;
+    top: auto;
+    bottom: 0;
+    transform: none;
+    width: 100%;
+    border-radius: 20px 20px 0 0;
   }
 }
