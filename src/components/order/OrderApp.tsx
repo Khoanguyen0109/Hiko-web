@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import type { CartLine, CartTopping, MenuCategory, MenuDish, MenuToppingGroup, PublicStore } from '@/types/publicOrder';
+import type { CartLine, CartTopping, MenuCategory, MenuDish, MenuTopping, MenuToppingGroup, PublicStore } from '@/types/publicOrder';
 import { formatVnd } from '@/types/publicOrder';
 
 const SWATCHES = ['#B9D77A', '#D7F0E2', '#F5E7CF', '#82CFA1', '#FFF8E8', '#4DB779'];
@@ -40,6 +40,18 @@ function toppingLabel(topping: CartTopping): string {
   return topping.quantity > 1 ? `${topping.name} ×${topping.quantity}` : topping.name;
 }
 
+function groupsForDish(dish: MenuDish): MenuToppingGroup[] {
+  if (!dish.allowToppings) return [];
+  const groups = new Map<string, MenuTopping[]>();
+  for (const topping of dish.toppings) {
+    const category = topping.category || 'Topping';
+    const list = groups.get(category) || [];
+    list.push(topping);
+    groups.set(category, list);
+  }
+  return [...groups.entries()].map(([category, toppings]) => ({ category, toppings }));
+}
+
 interface PickerState {
   dish: MenuDish;
   size: string;
@@ -61,7 +73,6 @@ export default function OrderApp() {
   const [stores, setStores] = useState<PublicStore[]>([]);
   const [storeId, setStoreId] = useState('');
   const [categories, setCategories] = useState<MenuCategory[]>([]);
-  const [toppingGroups, setToppingGroups] = useState<MenuToppingGroup[]>([]);
   const [categoryId, setCategoryId] = useState('');
   const [cart, setCart] = useState<CartLine[]>([]);
   const [picker, setPicker] = useState<PickerState | null>(null);
@@ -97,13 +108,12 @@ export default function OrderApp() {
     if (!storeId) return;
     let cancelled = false;
     setError('');
-    readJson<{ categories: MenuCategory[]; toppingGroups?: MenuToppingGroup[] }>(
+    readJson<{ categories: MenuCategory[] }>(
       fetch(`/api/order/menu?storeId=${encodeURIComponent(storeId)}`)
     )
       .then((menu) => {
         if (cancelled) return;
         setCategories(menu.categories);
-        setToppingGroups(menu.toppingGroups || []);
         setCategoryId(menu.categories[0]?.id || '');
         setCart([]);
         setPicker(null);
@@ -116,9 +126,9 @@ export default function OrderApp() {
     };
   }, [storeId]);
 
+  const pickerGroups = picker ? groupsForDish(picker.dish) : [];
   const pickerToppings: CartTopping[] = picker
-    ? toppingGroups
-        .flatMap((group) => group.toppings)
+    ? picker.dish.toppings
         .filter((topping) => (picker.toppingQty[topping.id] || 0) > 0)
         .map((topping) => ({ ...topping, quantity: picker.toppingQty[topping.id] }))
     : [];
@@ -160,8 +170,7 @@ export default function OrderApp() {
 
   function confirmPicker() {
     if (!picker) return;
-    const toppings: CartTopping[] = toppingGroups
-      .flatMap((group) => group.toppings)
+    const toppings: CartTopping[] = picker.dish.toppings
       .filter((topping) => (picker.toppingQty[topping.id] || 0) > 0)
       .map((topping) => ({ ...topping, quantity: picker.toppingQty[topping.id] }));
     const toppingTotal = toppings.reduce((sum, topping) => sum + topping.price * topping.quantity, 0);
@@ -364,7 +373,7 @@ export default function OrderApp() {
             ) : (
               <p className="from-price">{formatVnd(picker.price)}</p>
             )}
-            {toppingGroups.map((group) => (
+            {pickerGroups.map((group) => (
               <div className="picker-block" key={group.category}>
                 <h4>{group.category}</h4>
                 {group.toppings.map((topping) => {

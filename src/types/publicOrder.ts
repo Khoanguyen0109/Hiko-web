@@ -14,6 +14,7 @@ export interface MenuTopping {
   id: string;
   name: string;
   price: number;
+  category?: string;
 }
 
 export interface MenuToppingGroup {
