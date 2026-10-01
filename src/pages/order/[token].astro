@@ -1,0 +1,48 @@
+---
+import ReceiptView from '@/components/order/ReceiptView';
+import { getPosApiUrl } from '@/lib/posCampaignProxy';
+import { publicOrderHeaders } from '@/lib/posOrderProxy';
+import type { PublicReceipt } from '@/types/publicOrder';
+import '@/assets/styles/order.css';
+
+export const prerender = false;
+
+const token = Astro.params.token || '';
+let receipt: PublicReceipt | null = null;
+let error = '';
+
+if (token) {
+  try {
+    const baseUrl = getPosApiUrl().replace(/\/$/, '');
+    const response = await fetch(`${baseUrl}/public/orders/${encodeURIComponent(token)}`, {
+      headers: publicOrderHeaders(),
+    });
+    const payload = (await response.json()) as { data?: PublicReceipt; message?: string };
+    if (response.ok && payload.data) {
+      receipt = payload.data;
+    } else {
+      error = payload.message || 'Không tìm thấy đơn';
+    }
+  } catch {
+    error = 'Không thể kết nối máy chủ.';
+  }
+}
+---
+
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Phiếu chuyển khoản | Hiko Matcha</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <ReceiptView client:load initialReceipt={receipt} token={token} error={error} />
+  </body>
+</html>

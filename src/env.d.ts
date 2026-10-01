@@ -3,6 +3,7 @@
 
 interface ImportMetaEnv {
   readonly HIKO_POS_API_URL?: string;
+  readonly HIKO_ORDER_KEY?: string;
   readonly RESEND_API_KEY?: string;
   readonly CONTACT_EMAIL?: string;
   readonly RESEND_FROM?: string;
