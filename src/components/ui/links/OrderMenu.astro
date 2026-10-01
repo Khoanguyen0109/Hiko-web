@@ -1,0 +1,81 @@
+---
+import strings from '@utils/navigation.ts';
+
+const { name, links } = strings.orderMenu;
+const itemClass =
+  'rounded-lg px-3 py-2 text-sm font-medium text-neutral-800 hover:bg-neutral-100 focus:bg-neutral-100 focus:outline-hidden dark:text-neutral-200 dark:hover:bg-neutral-700';
+---
+
+<div class="order-menu">
+  <p class="text-base font-medium text-white/60 md:hidden">Order</p>
+  <div class="mt-1 flex flex-col gap-1 pl-3 md:hidden">
+    {
+      links.map(link => (
+        <a
+          class="rounded-lg text-base font-medium text-white/90 hover:text-white"
+          href={link.url}
+          {...(link.url.startsWith('http')
+            ? { target: '_blank', rel: 'noopener noreferrer' }
+            : { 'data-astro-prefetch': true })}
+        >
+          {link.name}
+        </a>
+      ))
+    }
+  </div>
+
+  <details class="relative hidden md:block">
+    <summary
+      id="order-menu"
+      class="flex cursor-pointer list-none items-center gap-1 rounded-lg text-sm font-medium text-white/90 ring-white/40 outline-hidden hover:text-white focus-visible:ring-3 md:py-3 2xl:text-base"
+    >
+      {name}
+      <svg
+        class="size-4"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="m6 9 6 6 6-6"></path>
+      </svg>
+    </summary>
+    <div
+      class="absolute right-0 z-50 mt-2 min-w-52 rounded-lg bg-neutral-50 p-2 shadow-md dark:border dark:border-neutral-700 dark:bg-neutral-800"
+    >
+      {
+        links.map(link => (
+          <a
+            class:list={['block', itemClass]}
+            href={link.url}
+            {...(link.url.startsWith('http')
+              ? { target: '_blank', rel: 'noopener noreferrer' }
+              : { 'data-astro-prefetch': true })}
+          >
+            {link.name}
+          </a>
+        ))
+      }
+    </div>
+  </details>
+</div>
+
+<style>
+  .order-menu summary::-webkit-details-marker {
+    display: none;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const summary = document.getElementById('order-menu');
+    if (!summary) return;
+    if (window.location.pathname.startsWith('/order')) {
+      summary.classList.remove('text-white/90', 'hover:text-white');
+      summary.classList.add('text-yellow-300');
+    }
+  });
+</script>

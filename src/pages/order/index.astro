@@ -1,25 +1,17 @@
 ---
+import MainLayout from '@/layouts/MainLayout.astro';
 import OrderApp from '@/components/order/OrderApp';
 import '@/assets/styles/order.css';
 
 export const prerender = false;
 ---
 
-<!doctype html>
-<html lang="vi">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="description" content="Đặt món Hiko Matcha và chuyển khoản." />
-    <title>Đặt món | Hiko Matcha</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-  </head>
-  <body>
-    <OrderApp client:load />
-  </body>
-</html>
+<MainLayout
+  title="Đặt món | Hiko Matcha"
+  lang="vi"
+  hideFooter
+  customDescription="Đặt món Hiko Matcha và chuyển khoản."
+  customOgTitle="Đặt món | Hiko Matcha"
+>
+  <OrderApp client:load />
+</MainLayout>

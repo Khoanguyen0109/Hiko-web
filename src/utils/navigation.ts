@@ -5,6 +5,16 @@ const navBarLinks = [
   { name: 'Câu Chuyện', url: '/story' },
   { name: 'Liên Hệ', url: '/contact' },
 ];
+const orderMenu = {
+  name: 'Order',
+  links: [
+    { name: 'Order trực tiếp', url: '/order' },
+    {
+      name: 'GrabFood Order',
+      url: 'https://food.grab.com/vn/vi/restaurant/hiko-matcha-delivery/5-C7NHN6CWJPBTAA',
+    },
+  ],
+};
 // An array of links for footer
 const footerLinks = [
   {
@@ -36,6 +46,7 @@ const socialLinks = {
 
 export default {
   navBarLinks,
+  orderMenu,
   footerLinks,
   socialLinks,
 };

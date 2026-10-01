@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import type { CartLine, MenuCategory, MenuDish, MenuTopping, PublicStore } from '@/types/publicOrder';
 import { formatVnd } from '@/types/publicOrder';
 
-const SWATCHES = ['#c5d6a8', '#e7d7b8', '#d9d3c8', '#e4c9a2', '#d5e3c4', '#c3d0b4'];
+const SWATCHES = ['#B9D77A', '#D7F0E2', '#F5E7CF', '#82CFA1', '#FFF8E8', '#4DB779'];
 
 function lineKey(dishId: string, size: string, toppings: MenuTopping[]): string {
   const toppingKey = toppings.map((topping) => topping.id).sort().join(',');
@@ -187,7 +187,7 @@ export default function OrderApp() {
   return (
     <div className={sheetOpen ? 'order-app sheet-open' : 'order-app'}>
       <header className="order-header">
-        <a className="logo" href="/">Hiko Matcha</a>
+        <h1 className="logo">Đặt món</h1>
         <nav className="stores">
           {stores.map((entry) => (
             <button
