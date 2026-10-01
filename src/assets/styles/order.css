@@ -241,12 +241,42 @@
   transform: translate(-50%, -50%);
   width: min(440px, calc(100% - 32px));
   max-height: 86vh;
-  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   background: #fff;
   border: 1px solid #d8e8da;
   border-radius: 16px;
-  padding: 18px 18px 20px;
+  padding: 0;
   box-shadow: 0 16px 40px rgb(0 31 18 / 18%);
+}
+
+.picker-scroll {
+  min-height: 0;
+  overflow: auto;
+  padding: 18px 18px 8px;
+}
+
+.picker-foot {
+  flex: none;
+  padding: 12px 18px 18px;
+  border-top: 1px solid #d8e8da;
+  background: #fff;
+}
+
+.picker .sizes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+}
+
+.picker .sizes button {
+  width: 100%;
+  min-height: 44px;
+}
+
+.picker .submit {
+  width: 100%;
+  margin-top: 0;
 }
 
 .picker-photo {
@@ -530,6 +560,7 @@ html.dark .tile,
 html.dark .bag,
 html.dark .receipt,
 html.dark .picker,
+html.dark .picker-foot,
 html.dark .order-app input,
 html.dark .order-app textarea,
 html.dark .sizes button,

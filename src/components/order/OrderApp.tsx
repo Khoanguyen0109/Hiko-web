@@ -315,7 +315,7 @@ export default function OrderApp() {
               <article className="tile" key={dish.id}>
                 <button type="button" className="tile-open" onClick={() => openPicker(dish)}>
                   <div className="swatch" style={{ backgroundColor: color }}>
-                    {dish.image ? <img src={dish.image} alt="" /> : null}
+                    {dish.image ? <img src={dish.image} alt="" onError={(event) => { event.currentTarget.hidden = true; }} /> : null}
                     <span>{categoryName}</span>
                   </div>
                   <h2>{dish.name}</h2>
@@ -325,7 +325,7 @@ export default function OrderApp() {
             );
           })}
         </section>
-        <aside className="bag">
+        <aside className="bag" data-lenis-prevent>
           <button className="close-sheet" type="button" onClick={() => setSheetOpen(false)}>Đóng</button>
           <h3>Giỏ</h3>
           <p className="sub">{store ? `${store.name} nhận đơn này` : 'Chọn cửa hàng'}</p>
@@ -335,11 +335,12 @@ export default function OrderApp() {
       {picker ? (
         <>
           <button className="picker-back" type="button" aria-label="Đóng món" onClick={() => setPicker(null)} />
-          <aside className="picker">
+          <aside className="picker" data-lenis-prevent>
+            <div className="picker-scroll">
             <button className="close-sheet" type="button" onClick={() => setPicker(null)}>Đóng</button>
             {picker.dish.image ? (
               <div className="swatch picker-photo" style={{ backgroundColor: categoryColor || '#B9D77A' }}>
-                <img src={picker.dish.image} alt="" />
+                <img src={picker.dish.image} alt="" onError={(event) => { event.currentTarget.hidden = true; }} />
                 {categoryName ? <span>{categoryName}</span> : null}
               </div>
             ) : null}
@@ -392,9 +393,12 @@ export default function OrderApp() {
                 <button type="button" onClick={() => setPicker({ ...picker, quantity: Math.min(20, picker.quantity + 1) })} aria-label="Thêm">+</button>
               </span>
             </div>
-            <button className="submit" type="button" onClick={confirmPicker}>
-              Thêm vào giỏ · {formatVnd(pickerTotal)}
-            </button>
+            </div>
+            <div className="picker-foot">
+              <button className="submit" type="button" onClick={confirmPicker}>
+                Thêm vào giỏ · {formatVnd(pickerTotal)}
+              </button>
+            </div>
           </aside>
         </>
       ) : null}
